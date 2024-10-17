@@ -12,6 +12,8 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
     {
         string linea;
         string dato;
+        // Mantenimiento (Revisión): Se puede mejorar la lectura de archivos con getline y
+        // No debería saltarse la primera linea para así determinar qué está leyendo.
         // Saltarse la primera linea
         getline(archivoProgramasCsv, linea);
         // Leer los programas
@@ -19,6 +21,8 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
         {
             stringstream streamLinea(linea);
             getline(streamLinea, dato, ';');
+            // Manteniemiento: Se puede mejorar la forma de leer los datos de la línea y
+            // los nombres de los métodos y variables.
             codigosSniesRetorno.push_back(stoi(dato));
         }
     }
@@ -26,8 +30,12 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
     return codigosSniesRetorno;
 }
 
+// Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
+// Estructuras de control anidadas profundamente.
 vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
 {
+    // Estructura: La estructura es confusa.
+    // Mantenimiento: Se pueden mejorar los nombres de las variables.
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
     ifstream archivoPrimero(rutaCompleta);
@@ -126,6 +134,8 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
     return matrizResultado;
 }
 
+// Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
+// Parece hacer lo mismo que el metodo leerArchivoPrimera
 vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies)
 {
     vector<vector<string>> matrizResultado;

@@ -5,19 +5,15 @@
 #include <vector>
 #include <map>
 #include <fstream>
-#include <sstream>
-#include <list>
-#include <algorithm>
-#include "ProgramaAcademico.h"
-#include "Consolidado.h"
 
-using namespace std;
+// Recomendación Linter: Se debe evitar el uso de using namespace en archivos de cabecera
+using std::string;
 
-class GestorCsv
-{
+class GestorCsv {
 public:
     GestorCsv() = default;
     vector<int> leerProgramasCsv(string &ruta);
+    // Mantenimiento: Se puede mejorar la firma y nombre de los metodos para que sea más descriptiva
     vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies);
     vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies);
     vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies);

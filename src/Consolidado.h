@@ -28,8 +28,10 @@ private:
 
 public:
     Consolidado();
+    // Mantenimiento: Gran cantidad de atributos en la firma del constructor
     Consolidado(int, string, int, int, int, int, int, int, int);
 
+    // Mantenimiento: Gran cantidad de métodos get y set que tal vez no son estrictamente necesarios
     int getIdSexo();
     void setIdSexo(int);
 
