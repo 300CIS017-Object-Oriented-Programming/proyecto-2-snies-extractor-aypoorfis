@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/QApazJy0)
 
 ## SNIES Extractor
 Gracias al grupo que me presetó el código fuente de este proyecto
@@ -32,6 +33,23 @@ En este proyecto se utilizarán 5 clases para cumplir el propósito de extraer l
 
 Más abajo podrán encontrar el diagrama UML de las clases.
 
+# Correción de errores
+   ###  1) Refactorizacion inicial del diagrama de clases : 
+Se añadieron nueva clases en el diagrama UML (GestorJson, GestorDatos) donde GestorDatos es la clase padre que hereda sus metodos a las otras clases.
+
+   ### 2) Creación clase GestorJson :
+Se implemento una nueva clase que permite exportar documentos de tipo .Json.
+   ### 3) Creación clase GestorTxt :
+Se implemento una nueva clase que permite exportar documentos de tipo .Txt.
+
+   ### 4) Refactorización clases Consolidado y ProgramaAcademico :
+   Se refactorizo las clases Consolidado y ProgramaAcademico para adecuarlas a los principios GRASP.
+   ### 5) Creacion clase Settings :
+   se implemento una nueva clase en el proyecto donde el usuario es libre de la configuracion.
+   ### 6) Modificación de los prototipos de las clases :
+   Se modificaron diferentes atributos y metodos de las clases Consolidado, ProgramaAcademico, GestorCSV y SNIESController con el objetivo de reducir la complejidad, aumentar la cohesión y disminuir la codependencia.
+   ### 7) Creacion de clase GestorDatos :
+   Se implemento una nueva clase quien es la clase padre de GestorCsv, GestorJson, GestorTXT.
 
 # Diagrama Mermaid
 
@@ -185,6 +203,13 @@ direction BT
         +getMatriculados()
         +getGraduados()
     }
+    
+    class GestorDatos{
+    # GestorDatos();
+    # ~GestorDatos();
+    # virtual void exportarDatos(const string & filePath)
+    }
+    
     class GestorCsv {
         +GestorCsv() = default
         +vector<int> leerProgramasCsv(string &ruta)
@@ -194,7 +219,14 @@ direction BT
         +bool crearArchivo(string &ruta, map <int, ProgramaAcademico*> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
         +bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico*> &programasBuscados, vector<string> etiquetasColumnas)
         +bool crearArchivoExtra(string &ruta,vector<vector<string>> datosAImprimir)
+        # void exportarDatos(const string & filePath) override
     }
+    
+    class GestorJson{
+     # GestorJson();
+    # ~GestorJson();
+    # void exportarDatos(const string & filePath) override
+     }
     class SNIESController {
         -map <int, ProgramaAcademico*> programasAcademicos
         -GestorCsv gestorCsvObj
@@ -212,6 +244,16 @@ direction BT
         +void calcularDatosExtra(bool)
         +void buscarProgramas(bool, string &, int)
     }
+    class Settings {
+        +static const string ADMITIDOS_FILE_PATH
+        +static const string MATRICULADOS_FILE_PATH
+        +static const string INSCRITOS_FILE_PATH
+        +static const string PROGRAMAS_FILTRAR_FILE_PATH
+        +static const string BASE_PATH
+        +static const string DELIMITADOR
+
+    }
+
     class View {
         SNIESController controlador
         +View()
@@ -230,6 +272,9 @@ ProgramaAcademico o-- Consolidado : tiene varios
 View <.. Main : usa
 View --> SNIESController : tiene un
 SNIESController --> GestorCsv: tiene un
+GestorCsv <|-- GestorDatos : Es un
+GestorJson <|-- GestorDatos : Es un
 SNIESController o-- Consolidado
 Consolidado <.. GestorCsv: usa
+
 ```
