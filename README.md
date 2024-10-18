@@ -50,6 +50,12 @@ Se implemento una nueva clase que permite exportar documentos de tipo .Txt.
    Se modificaron diferentes atributos y metodos de las clases Consolidado, ProgramaAcademico, GestorCSV y SNIESController con el objetivo de reducir la complejidad, aumentar la cohesión y disminuir la codependencia.
    ### 7) Creacion de clase GestorDatos :
    Se implemento una nueva clase quien es la clase padre de GestorCsv, GestorJson, GestorTXT.
+   ### 8) Refactorización del metodo exportarDatos :
+   se realizaron correciones en el header ya que sonarline siguirio cambiar nuetros std:: en la cabezera y tambien se añadio la libreria estandar.
+   ### 9) Implementacion clases ProgramaAcademico y Consolidado
+   Se implemento los prototipos de esas clases teniendo como objetivo la construccion de una serie de métodos auxiliares que permitan facilitar las tareas y métodos de las demás clases.
+   ### 10) Solucion de error en la clase GestorCSV :
+   Se soluciono el error usando using namespace std::.
 
 # Diagrama Mermaid
 
