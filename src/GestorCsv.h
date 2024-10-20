@@ -20,7 +20,7 @@ using std::unordered_map;
 
 class GestorCsv {
 private:
-    string convertirStringFormaEstandar(string &stringIn);
+    vector<string> convertirStringFormaEstandar(vector<string> &stringIn);
 
 public:
     GestorCsv() = default;

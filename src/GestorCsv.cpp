@@ -562,9 +562,7 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
 }
 
 
-
-
-string GestorCsv::convertirStringFormaEstandar(string &stringIn) {
+vector<string> GestorCsv::convertirStringFormaEstandar(vector<string> &stringsIn) {
     static const unordered_map<char, char> tildesMap = {
         {'á', 'a'}, {'Á', 'a'},
         {'é', 'e'}, {'É', 'e'},
@@ -573,20 +571,28 @@ string GestorCsv::convertirStringFormaEstandar(string &stringIn) {
         {'ú', 'u'}, {'Ú', 'u'}
     };
 
-    string ans;
-    for (int i = 0; i < stringIn.length(); ++i) {
-        char letra = tolower(stringIn[i]);  // Se convierte a minúscula
+    vector<string> resultado;
 
-        if (tildesMap.count(letra)) {
-            letra = tildesMap.at(letra);  // Se reemplaza la vocal con tilde
+
+    for (int j = 0; j < stringsIn.size(); ++j) {
+        string ans;
+        string &stringIn = stringsIn[j];  // para saber el string actual
+
+        for (int i = 0; i < stringIn.length(); ++i) {
+            char letra = tolower(stringIn[i]);
+
+            if (tildesMap.count(letra)) {
+                letra = tildesMap.at(letra);
+            }
+
+            if (letra != ' ' && letra != '-') {
+                ans += letra;
+            }
         }
 
-        if (letra != ' ' && letra != '-') {
-            ans += letra;
-        }
+        resultado.push_back(ans);
     }
 
-    return ans;
+    return resultado;
 }
-
 
