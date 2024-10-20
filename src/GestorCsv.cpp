@@ -37,7 +37,6 @@ vector<string> GestorCsv::convertirVectorFormaEstandar(vector<string> &stringsIn
 
         resultado.push_back(ans);
     }
-
     return resultado;
 }
 
