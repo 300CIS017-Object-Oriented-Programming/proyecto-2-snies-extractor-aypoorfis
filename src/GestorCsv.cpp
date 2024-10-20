@@ -560,3 +560,33 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
     archivoExtra.close();
     return estadoCreacion;
 }
+
+
+
+
+string GestorCsv::convertirStringFormaEstandar(string &stringIn) {
+    static const unordered_map<char, char> tildesMap = {
+        {'á', 'a'}, {'Á', 'a'},
+        {'é', 'e'}, {'É', 'e'},
+        {'í', 'i'}, {'Í', 'i'},
+        {'ó', 'o'}, {'Ó', 'o'},
+        {'ú', 'u'}, {'Ú', 'u'}
+    };
+
+    string ans;
+    for (int i = 0; i < stringIn.length(); ++i) {
+        char letra = tolower(stringIn[i]);  // Se convierte a minúscula
+
+        if (tildesMap.count(letra)) {
+            letra = tildesMap.at(letra);  // Se reemplaza la vocal con tilde
+        }
+
+        if (letra != ' ' && letra != '-') {
+            ans += letra;
+        }
+    }
+
+    return ans;
+}
+
+

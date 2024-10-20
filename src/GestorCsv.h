@@ -7,14 +7,21 @@
 #include <map>
 #include <list>
 #include <fstream>
+#include <unordered_map>
+#include <cctype>
 #include "ProgramaAcademico.h"
+
 
 using std::string;
 using std::vector;
 using std::map;
 using std::list;
+using std::unordered_map;
 
 class GestorCsv {
+private:
+    string convertirStringFormaEstandar(string &stringIn);
+
 public:
     GestorCsv() = default;
     vector<int> leerProgramasCsv(string &ruta);
@@ -26,6 +33,8 @@ public:
     bool crearArchivo(string &ruta, map <int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas);
     bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas);
     bool crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir);
+
+
 };
 
 #endif
