@@ -4,7 +4,7 @@
 Gracias al grupo que me presetó el código fuente de este proyecto
 
 ## Presentación general
-En este proyecto se utilizarán 5 clases para cumplir el propósito de extraer la información del Sistema Nacional de Información de Educación Superior. Para el usuario, este tendrá una interfaz por terminal que le indicará los pasos a seguir y la información que necesita digitar.
+En este proyecto se utilizarán varias clases para cumplir el propósito de extraer la información del Sistema Nacional de Información de Educación Superior. Para el usuario, este tendrá una interfaz por terminal que le indicará los pasos a seguir y la información que necesita digitar.
 
 ## Cumplimiento de Requerimientos
 
@@ -217,6 +217,7 @@ direction BT
     }
     
     class GestorCsv {
+        -string convertirStringFormaEstandar((string &stringIn)
         +GestorCsv() = default
         +vector<int> leerProgramasCsv(string &ruta)
         +vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
