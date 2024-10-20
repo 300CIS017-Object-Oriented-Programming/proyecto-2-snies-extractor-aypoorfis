@@ -561,6 +561,7 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
     return estadoCreacion;
 }
 
+
 string GestorCsv::convertirStringFormaEstandar(string &stringIn) {
     static const unordered_map<char, char> tildesMap = {
         {'á', 'a'}, {'Á', 'a'},
