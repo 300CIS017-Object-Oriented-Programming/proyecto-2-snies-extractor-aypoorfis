@@ -20,11 +20,11 @@ using std::unordered_map;
 
 class GestorCsv {
 private:
-    vector<string> convertirStringFormaEstandar(vector<string> &stringIn);
+    static vector<string> convertirVectorFormaEstandar(vector<string> &);
 
 public:
     GestorCsv() = default;
-    vector<int> leerProgramasCsv(string &ruta);
+    static void leerProgramasCsv(map<string, ProgramaAcademico*> &);
     // Mantenimiento: Se puede mejorar la firma y nombre de los metodos para que sea más descriptiva
     vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies);
     vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies);

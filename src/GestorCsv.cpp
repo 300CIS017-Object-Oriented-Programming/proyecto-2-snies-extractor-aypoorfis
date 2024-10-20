@@ -1,33 +1,110 @@
 #include "GestorCsv.h"
-// FIXME: LA LECTURA DE ARCHIVOS CON GETLINE FUNCIONA HORRIBLEMENTE, NO TENEMOS IDEA DE POR QUÉ
-vector<int> GestorCsv::leerProgramasCsv(string &ruta)
-{
-    vector<int> codigosSniesRetorno;
-    ifstream archivoProgramasCsv(ruta);
-    if (!(archivoProgramasCsv.is_open()))
-    {
-        cout << "Archivo " << ruta << " no se pudo abrir correctamente" << endl;
+#include "Settings.h"
+#include "ProgramaAcademico.h"
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+using namespace std;
+
+vector<string> GestorCsv::convertirVectorFormaEstandar(vector<string> &stringsIn) {
+    static const unordered_map<char, char> tildesMap = {
+        {'á', 'a'}, {'Á', 'a'},
+        {'é', 'e'}, {'É', 'e'},
+        {'í', 'i'}, {'Í', 'i'},
+        {'ó', 'o'}, {'Ó', 'o'},
+        {'ú', 'u'}, {'Ú', 'u'}
+    };
+
+    vector<string> resultado;
+
+
+    for (int j = 0; j < stringsIn.size(); ++j) {
+        string ans;
+        string &stringIn = stringsIn[j];  // para saber el string actual
+
+        for (int i = 0; i < stringIn.length(); ++i) {
+            char letra = tolower(stringIn[i]);
+
+            if (tildesMap.count(letra)) {
+                letra = tildesMap.at(letra);
+            }
+
+            if (letra != ' ' && letra != '-') {
+                ans += letra;
+            }
+        }
+
+        resultado.push_back(ans);
     }
-    else
-    {
-        string linea;
+
+    return resultado;
+}
+
+void GestorCsv::leerProgramasCsv(map<string, ProgramaAcademico*> &datos) {
+    ifstream archivoProgramasCsv(Settings::PROGRAMAS_FILTRAR_FILE_PATH);
+    if (!archivoProgramasCsv.is_open()) {
+        cout << "Archivo " << Settings::PROGRAMAS_FILTRAR_FILE_PATH << " no se pudo abrir correctamente" << std::endl;
+        return;
+    }
+
+    string linea;
+    vector<std::string> nombresColumnas;
+    char delimitador = Settings::DELIMITADOR[0];
+
+    // Leer la primera línea para obtener los nombres de las columnas
+    if (getline(archivoProgramasCsv, linea)) {
+        stringstream streamLinea(linea);
+        string columna;
+
+        while (getline(streamLinea, columna, delimitador)) {
+            nombresColumnas.push_back(columna);
+        }
+        // Convertir los nombres de las columnas a su forma estándar
+        nombresColumnas = convertirVectorFormaEstandar(nombresColumnas);
+    }
+
+    // Leer el resto del archivo
+    while (getline(archivoProgramasCsv, linea)) {
+        stringstream streamLinea(linea);
+        vector<string> datosFila;
         string dato;
-        // Mantenimiento (Revisión): Se puede mejorar la lectura de archivos con getline y
-        // No debería saltarse la primera linea para así determinar qué está leyendo.
-        // Saltarse la primera linea
-        getline(archivoProgramasCsv, linea);
-        // Leer los programas
-        while (getline(archivoProgramasCsv, linea))
-        {
-            stringstream streamLinea(linea);
-            getline(streamLinea, dato, ';');
-            // Manteniemiento: Se puede mejorar la forma de leer los datos de la línea y
-            // los nombres de los métodos y variables.
-            codigosSniesRetorno.push_back(stoi(dato));
+
+        while (getline(streamLinea, dato, delimitador)) {
+            datosFila.push_back(dato);
+        }
+
+        if (datosFila.size() != nombresColumnas.size()) {
+            cout << "Error: La cantidad de datos no coincide con la cantidad de columnas" << endl;
+        }
+        else {
+            // Crear un ProgramaAcademico vacío
+            ProgramaAcademico* programa = new ProgramaAcademico();
+
+            // Agregar el programa al mapa usando el código SNIES como llave
+            string codigoSnies = datosFila[0];
+            datos[codigoSnies] = programa;
+
+            // Agregar la información al programa académico
+            for (size_t i = 0; i < nombresColumnas.size(); ++i) {
+                programa->setDato(nombresColumnas[i], datosFila[i]);
+            }
+        }
+
+        // Crear un ProgramaAcademico vacío
+        ProgramaAcademico* programa = new ProgramaAcademico();
+
+        // Agregar el programa al mapa usando el código SNIES como llave
+        string codigoSnies = datosFila[0];
+        datos[codigoSnies] = programa;
+
+        // Agregar la información al programa académico
+        for (size_t i = 0; i < nombresColumnas.size(); ++i) {
+            programa->setDato(nombresColumnas[i], datosFila[i]);
         }
     }
+
     archivoProgramasCsv.close();
-    return codigosSniesRetorno;
 }
 
 // Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
@@ -564,37 +641,5 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
 
 
 
-vector<string> GestorCsv::convertirStringFormaEstandar(vector<string> &stringsIn) {
-    static const unordered_map<char, char> tildesMap = {
-        {'á', 'a'}, {'Á', 'a'},
-        {'é', 'e'}, {'É', 'e'},
-        {'í', 'i'}, {'Í', 'i'},
-        {'ó', 'o'}, {'Ó', 'o'},
-        {'ú', 'u'}, {'Ú', 'u'}
-    };
 
-    vector<string> resultado;
-
-
-    for (int j = 0; j < stringsIn.size(); ++j) {
-        string ans;
-        string &stringIn = stringsIn[j];  // para saber el string actual
-
-        for (int i = 0; i < stringIn.length(); ++i) {
-            char letra = tolower(stringIn[i]);
-
-            if (tildesMap.count(letra)) {
-                letra = tildesMap.at(letra);
-            }
-
-            if (letra != ' ' && letra != '-') {
-                ans += letra;
-            }
-        }
-
-        resultado.push_back(ans);
-    }
-
-    return resultado;
-}
 
