@@ -1,95 +1,78 @@
 #include "Consolidado.h"
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
 
-Consolidado::Consolidado() = default;
+using std::stoi;
+using std::string;
+using std::map;
+using std::vector;
+using std::cerr;
+using std::endl;
+using std::cout;
 
-Consolidado::Consolidado(int idSexo, string sexo, int ano, int semestre, int inscritos, int admitidos, int primeraMatricula, int totalMatriculados, int graduados)
-    : idSexo(idSexo), sexo(sexo), ano(ano), semestre(semestre), inscritos(inscritos), admitidos(admitidos), matriculados(primeraMatricula), matriculadosPrimerSemestre(totalMatriculados), graduados(graduados) {}
+Consolidado::Consolidado(const int idSexo, string sexo, int anio, const int semestre) :
+idSexo(idSexo), sexo(std::move(sexo)), anio(anio), semestre(semestre), inscritos(0), admitidos(0), matriculados(0), matriculadosPrimerSemestre(0), graduados(0) {}
 
-int Consolidado::getIdSexo()
-{
+int Consolidado::getIdSexo() const {
     return idSexo;
 }
 
-void Consolidado::setIdSexo(int idSexo)
-{
-    this->idSexo = idSexo;
-}
-
-string Consolidado::getSexo()
-{
+string Consolidado::getSexo() const {
     return sexo;
 }
 
-void Consolidado::setSexo(string &sexo)
-{
-    this->sexo = sexo;
+int Consolidado::getAnio() const {
+    return anio;
 }
 
-int Consolidado::getAno()
-{
-    return ano;
-}
-
-void Consolidado::setAno(int ano)
-{
-    this->ano = ano;
-}
-
-int Consolidado::getSemestre()
-{
+int Consolidado::getSemestre() const {
     return semestre;
 }
-void Consolidado::setSemestre(int semestre)
-{
-    this->semestre = semestre;
-}
 
-int Consolidado::getInscritos()
-{
+int Consolidado::getInscritos() const {
     return inscritos;
 }
 
-void Consolidado::setInscritos(int inscritos)
-{
-    this->inscritos = inscritos;
-}
-
-int Consolidado::getAdmitidos()
-{
+int Consolidado::getAdmitidos() const {
     return admitidos;
 }
 
-void Consolidado::setAdmitidos(int admitidos)
-{
-    this->admitidos = admitidos;
-}
-
-int Consolidado::getMatriculados()
-{
+int Consolidado::getMatriculados() const {
     return matriculados;
 }
 
-void Consolidado::setMatriculados(int matriculados)
-{
-    this->matriculados = matriculados;
-}
-
-int Consolidado::getMatriculadosPrimerSemestre()
-{
+int Consolidado::getMatriculadosPrimerSemestre() const {
     return matriculadosPrimerSemestre;
 }
 
-void Consolidado::setMatriculadosPrimerSemestre(int matriculadosPrimerSemestre)
-{
-    this->matriculadosPrimerSemestre = matriculadosPrimerSemestre;
-}
-
-int Consolidado::getGraduados()
-{
+int Consolidado::getGraduados() const {
     return graduados;
 }
 
-void Consolidado::setGraduados(int graduados)
-{
-    this->graduados = graduados;
+bool Consolidado::verificarMapaValido(const map<string, string> &parametros) {
+    const vector<string> LLAVESVALIDAS  = {"inscritos", "admitidos", "matriculados", "matriculadosprimersemestre", "graduados"};
+    int i = 0;
+    bool esValido = true;
+    while(i < LLAVESVALIDAS.size() && esValido) {
+        if(parametros.find(LLAVESVALIDAS[i]) == parametros.end()) {
+            esValido = false;
+        }
+        i++;
+    }
+    return esValido;
+}
+
+void Consolidado::setParametros(const map<string,string> &parametros) {
+    if(verificarMapaValido(parametros)) {
+        inscritos = stoi(parametros.at("inscritos"));
+        admitidos = stoi(parametros.at("admitidos"));
+        matriculados = stoi(parametros.at("matriculados"));
+        matriculadosPrimerSemestre = stoi(parametros.at("matriculadosprimersemestre"));
+        graduados = stoi(parametros.at("graduados"));
+    } else {
+       throw std::invalid_argument("Los parámetros del consolidado no están donde deberían estar.");
+    }
+
 }
