@@ -24,6 +24,7 @@ SNIESController::~SNIESController()
     }
 }
 
+// Mantenimiento: Esta función tiene una complejidad altísima, se puede mejorar y reducir.
 void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
 {
     vector<int> codigosSnies;
@@ -260,6 +261,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
     // cout << archivoCreado << endl;
 }
 
+// Mantenimiento: El nombre de esta función es confuso.
 void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion)
 {
     list<ProgramaAcademico *> listaProgramas;
@@ -283,6 +285,7 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
     }
 }
 
+// Mantenimiento y Estructura: Esta función tiene una complejidad altísima, se puede mejorar y reducir.
 void SNIESController::calcularDatosExtra(bool flag)
 {
     vector<vector<string>> matrizFinal;
