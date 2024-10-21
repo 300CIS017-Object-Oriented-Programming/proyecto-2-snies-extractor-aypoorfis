@@ -32,7 +32,7 @@ public:
     static  string INSCRITOS_FILE_PATH;
     static  string PROGRAMAS_FILTRAR_FILE_PATH;
     static  string BASE_PATH;
-    static  string DELIMITADOR;
+    static char DELIMITADOR;
     static  string GRADUADOS_FILE_PATH;
 
     static void setBasePath(const std::string& newPath);

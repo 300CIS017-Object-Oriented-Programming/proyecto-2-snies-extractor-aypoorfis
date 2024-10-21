@@ -13,7 +13,7 @@ string Settings::PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "programas.csv";
 string Settings::ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
 string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados";
 string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "inscritos";
-string Settings::DELIMITADOR = ";";
+char Settings::DELIMITADOR = ";";
 
 string Settings::GRADUADOS_FILE_PATH = BASE_PATH + "graduados";
 

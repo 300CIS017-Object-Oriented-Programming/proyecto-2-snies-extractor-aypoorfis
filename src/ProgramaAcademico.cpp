@@ -65,8 +65,19 @@ int ProgramaAcademico::getTotalMatriculadosPorAnio(int anio) {
 }
 
 
-int ProgramaAcademico::getNuevosMatriculadosPorAnio(int) {
+int ProgramaAcademico::getNuevosMatriculadosPorAnio(int anio) {
+    int semestre1 = anio * 10 + 1;
+    int semestre2 = semestre1 + 1;
+    int cantidadNuevosMatriculados = 0;
 
+    if (auto it1 = consolidados.find(semestre1) && it1 != consolidados.end()) {
+        cantidadNuevosMatriculados += it1->second->getNuevosMatriculados();
+    }
+
+    if (auto it2 = consolidados.find(semestre2) && it2 != consolidados.end()) {
+        cantidadNuevosMatriculados += it2->second->getNuevosMatriculados();
+    }
+    return cantidadNuevosMatriculados;
 }
 
 
@@ -104,6 +115,8 @@ void ProgramaAcademico::mostrarDiferenciaPorcentualNuevosMatriculados(const pair
 
 
 void ProgramaAcademico::mostrarIdentificadoresPrograma() {
-    cout << "Código SNIES: " << this->getDato("codigosnies") << endl;
-    cout << "Nombre del programa académico: " << this->getDato("programaacademico") << endl;
+    string const LLAVECODIGOSNIES = "codigosnies";
+    string const LLAVENOMBREPROGRAMAACADEMICO = "programaacademico";
+    cout << "Código SNIES: " << this->getDato(LLAVECODIGOSNIES) << endl;
+    cout << "Nombre del programa académico: " << this->getDato(LLAVENOMBREPROGRAMAACADEMICO) << endl;
 }

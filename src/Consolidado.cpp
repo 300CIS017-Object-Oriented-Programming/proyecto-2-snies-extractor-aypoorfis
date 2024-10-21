@@ -51,7 +51,7 @@ int Consolidado::getGraduados() const {
     return graduados;
 }
 
-bool Consolidado::verificarMapaValido(const map<string, string> &parametros) {
+bool Consolidado::verificarMapaValido(const map<string, string> &parametros) const{
     const vector<string> LLAVESVALIDAS  = {"inscritos", "admitidos", "matriculados", "matriculadosprimersemestre", "graduados"};
     int i = 0;
     bool esValido = true;
