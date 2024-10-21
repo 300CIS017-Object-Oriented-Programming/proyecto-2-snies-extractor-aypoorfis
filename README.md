@@ -4,7 +4,7 @@
 Gracias al grupo que me presetó el código fuente de este proyecto
 
 ## Presentación general
-En este proyecto se utilizarán 5 clases para cumplir el propósito de extraer la información del Sistema Nacional de Información de Educación Superior. Para el usuario, este tendrá una interfaz por terminal que le indicará los pasos a seguir y la información que necesita digitar.
+En este proyecto se utilizarán varias clases para cumplir el propósito de extraer la información del Sistema Nacional de Información de Educación Superior. Para el usuario, este tendrá una interfaz por terminal que le indicará los pasos a seguir y la información que necesita digitar.
 
 ## Cumplimiento de Requerimientos
 
@@ -33,6 +33,29 @@ En este proyecto se utilizarán 5 clases para cumplir el propósito de extraer l
 
 Más abajo podrán encontrar el diagrama UML de las clases.
 
+# Correción de errores
+   ###  1) Refactorizacion inicial del diagrama de clases : 
+Se añadieron nueva clases en el diagrama UML (GestorJson, GestorDatos) donde GestorDatos es la clase padre que hereda sus metodos a las otras clases.
+
+   ### 2) Creación clase GestorJson :
+Se implemento una nueva clase que permite exportar documentos de tipo .Json.
+   ### 3) Creación clase GestorTxt :
+Se implemento una nueva clase que permite exportar documentos de tipo .Txt.
+
+   ### 4) Refactorización clases Consolidado y ProgramaAcademico :
+   Se refactorizo las clases Consolidado y ProgramaAcademico para adecuarlas a los principios GRASP.
+   ### 5) Creacion clase Settings :
+   se implemento una nueva clase en el proyecto donde el usuario es libre de la configuracion.
+   ### 6) Modificación de los prototipos de las clases :
+   Se modificaron diferentes atributos y metodos de las clases Consolidado, ProgramaAcademico, GestorCSV y SNIESController con el objetivo de reducir la complejidad, aumentar la cohesión y disminuir la codependencia.
+   ### 7) Creacion de clase GestorDatos :
+   Se implemento una nueva clase quien es la clase padre de GestorCsv, GestorJson, GestorTXT.
+   ### 8) Refactorización del metodo exportarDatos :
+   se realizaron correciones en el header ya que sonarline siguirio cambiar nuetros std:: en la cabezera y tambien se añadio la libreria estandar.
+   ### 9) Implementacion clases ProgramaAcademico y Consolidado
+   Se implemento los prototipos de esas clases teniendo como objetivo la construccion de una serie de métodos auxiliares que permitan facilitar las tareas y métodos de las demás clases.
+   ### 10) Solucion de error en la clase GestorCSV :
+   Se soluciono el error usando using namespace std::.
 
 # Diagrama Mermaid
 
@@ -186,7 +209,15 @@ direction BT
         +getMatriculados()
         +getGraduados()
     }
+    
+    class GestorDatos{
+    # GestorDatos();
+    # ~GestorDatos();
+    # virtual void exportarDatos(const string & filePath)
+    }
+    
     class GestorCsv {
+        -string convertirStringFormaEstandar((string &stringIn)
         +GestorCsv() = default
         +vector<int> leerProgramasCsv(string &ruta)
         +vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
@@ -195,7 +226,14 @@ direction BT
         +bool crearArchivo(string &ruta, map <int, ProgramaAcademico*> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
         +bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico*> &programasBuscados, vector<string> etiquetasColumnas)
         +bool crearArchivoExtra(string &ruta,vector<vector<string>> datosAImprimir)
+        # void exportarDatos(const string & filePath) override
     }
+    
+    class GestorJson{
+     # GestorJson();
+    # ~GestorJson();
+    # void exportarDatos(const string & filePath) override
+     }
     class SNIESController {
         -map <int, ProgramaAcademico*> programasAcademicos
         -GestorCsv gestorCsvObj
@@ -213,6 +251,16 @@ direction BT
         +void calcularDatosExtra(bool)
         +void buscarProgramas(bool, string &, int)
     }
+    class Settings {
+        +static const string ADMITIDOS_FILE_PATH
+        +static const string MATRICULADOS_FILE_PATH
+        +static const string INSCRITOS_FILE_PATH
+        +static const string PROGRAMAS_FILTRAR_FILE_PATH
+        +static const string BASE_PATH
+        +static const string DELIMITADOR
+
+    }
+
     class View {
         SNIESController controlador
         +View()
@@ -231,6 +279,9 @@ ProgramaAcademico o-- Consolidado : tiene varios
 View <.. Main : usa
 View --> SNIESController : tiene un
 SNIESController --> GestorCsv: tiene un
+GestorCsv <|-- GestorDatos : Es un
+GestorJson <|-- GestorDatos : Es un
 SNIESController o-- Consolidado
 Consolidado <.. GestorCsv: usa
+
 ```

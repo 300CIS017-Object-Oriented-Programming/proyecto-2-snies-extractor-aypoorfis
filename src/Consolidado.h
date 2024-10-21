@@ -2,14 +2,20 @@
 #define CONSOLIDADO_H
 
 #include <string>
-#include <map>
+#include <vector>
+#include <iostream>
 
+
+using std::cin;
+using std::cout;
+using std::endl;
 using std::string;
-using std::map;
+using std::vector;
+
 
 class Consolidado {
 private:
-    int idSexo = 0;
+    int idSexo;
     string sexo;
     int anio = 0;
     int semestre = 0;
@@ -21,24 +27,37 @@ private:
 
     static bool verificarMapaValido(const map<string, string> &);
 public:
-    Consolidado() = default;
-    Consolidado(int idSexo, string sexo, int ano, int semestre);
+    Consolidado();
+    // Mantenimiento: Gran cantidad de atributos en la firma del constructor
+    Consolidado(int, string, int, int, int, int, int, int, int);
 
     // Mantenimiento: Gran cantidad de métodos get y set que tal vez no son estrictamente necesarios
-    // Cambio: Se quitaron algunos sets de la clase.
-    int getIdSexo() const;
-    string getSexo() const;
-    int getAnio() const;
-    int getSemestre() const;
-    int getInscritos() const;
-    int getAdmitidos() const;
-    int getMatriculados() const;
-    int getMatriculadosPrimerSemestre() const;
-    int getGraduados() const;
-    // Este metodo se encarga de inicializar los atributos
-    // (Inscritos, Admitidos, Matriculados, MatriculadosPrimerSemestre, Graduados)
-    // de la clase con los valores que se encuentran en el vector de parametrosConsolidado
-    void setParametros(const map<string, string> &parametros);
+    int getIdSexo();
+    void setIdSexo(int);
+
+    string getSexo();
+    void setSexo(string &);
+
+    int getAno();
+    void setAno(int);
+
+    int getSemestre();
+    void setSemestre(int);
+
+    int getInscritos();
+    void setInscritos(int);
+
+    int getAdmitidos();
+    void setAdmitidos(int);
+
+    int getMatriculados();
+    void setMatriculados(int);
+
+    int getMatriculadosPrimerSemestre();
+    void setMatriculadosPrimerSemestre(int);
+
+    int getGraduados();
+    void setGraduados(int);
 };
 
 #endif // CONSOLIDADO_H
