@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <cctype>
-
+#include <algorithm>
 using std::vector;
 using std::string;
 using std::ifstream;
@@ -13,6 +13,9 @@ using std::stringstream;
 using std::unordered_map;
 using std::cout;
 using std::endl;
+
+using namespace std;
+
 
 string GestorCsv::convertirStringFormaEstandar(const string &input) {
     static const unordered_map<char, char> tildesMap = {
@@ -122,6 +125,48 @@ void GestorCsv::inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*
     archivoProgramasCsv.close();
 }
 
+void adjuntarDatosProgramaAcademico(vector<string> &vectorKeys, vector<string> &VectorValues, ProgramaAcademico &ProgramAcademic){
+    
+    vector<string> DatosEstudiantes = { "sexo","anio","semestre","inscritos","admitidos",
+                                        "matriculados","matriculadosPrimerSemestre","graduados"};
+    
+    vector<string> llavesEspeciales = {"inscritos", "admitidos", "matriculados",
+                                        "matriculadosprimersemestre", "graduados"};
+    map<string, string> mapaConsolidados;
+
+    for (int i = 0; i < vectorKeys.size(); i++)
+    {
+        
+        if (find(DatosEstudiantes.begin(),DatosEstudiantes.end(),DatosEstudiantes[i]) != DatosEstudiantes.end()){
+            Consolidado NewConsolidado;
+            NewConsolidado
+            ProgramAcademic.
+
+        }
+    }
+ 
+    for (size_t i = 0; i < llaves.size(); ++i) {
+        string &llave = llaves[i];
+        string &valor = valores[i];
+
+        // Verificar si la llave es especial
+        if (find(llavesEspeciales.begin(), llavesEspeciales.end(), llave) != llavesEspeciales.end()) {
+            // Agregar al mapa de consolidado
+            mapaConsolidados[llave] = valor;
+        } else {
+            // Agregar al ProgramaAcademico
+            programa.setDato(llave, valor);
+        }
+    }
+
+    // Si hay llaves especiales, crear y agregar el Consolidado
+    if (!mapaConsolidados.empty()) {
+        Consolidado* consolidado = new Consolidado();
+        consolidado->setParametros(mapaConsolidados);
+        programa.addConsolidado(0, consolidado); // Asumimos semestre 0 para este ejemplo
+    }
+}
+    
 void GestorCsv::adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &datos) {
     // File paths from Settings
     vector<string> filePaths = {
