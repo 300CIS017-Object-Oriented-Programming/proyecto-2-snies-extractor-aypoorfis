@@ -214,13 +214,13 @@ direction BT
     # GestorDatos();
     # ~GestorDatos();
     # virtual void exportarDatos(const string & filePath)
+    # void manejarErrores(const string& mensaje)
     }
     
     class GestorCsv {
+        -vector<string> convertirStringFormaEstandar(vector<string> &stringIn)
         +GestorCsv() = default
         +vector<int> leerProgramasCsv(string &ruta)
-        +vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
-        +vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies)
         +vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies)
         +bool crearArchivo(string &ruta, map <int, ProgramaAcademico*> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
         +bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico*> &programasBuscados, vector<string> etiquetasColumnas)
@@ -257,6 +257,7 @@ direction BT
         +static const string PROGRAMAS_FILTRAR_FILE_PATH
         +static const string BASE_PATH
         +static const string DELIMITADOR
+        +static const string GRADUADOS_FILE_PATH;
 
     }
 
@@ -264,11 +265,12 @@ direction BT
         SNIESController controlador
         +View()
         +~View()
-        +bool pantallaBienvenido()
-        +void visualizacionDatosExtra()
-        +void buscarPorPalabraClaveYFormacion()
-        +void salir()
-        +bool isConvetibleToInt()
+        -bool pantallaBienvenido()
+        -void visualizacionDatosExtra()
+        -void buscarPorPalabraClaveYFormacion()
+        -void salir()
+        -bool isConvetibleToInt()
+        +void mostrarMenu()
     }
     class Main {
         + int main()
