@@ -1,4 +1,3 @@
-
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
 #include <iostream>
@@ -108,8 +107,3 @@ void ProgramaAcademico::mostrarIdentificadoresPrograma() {
     cout << "Código SNIES: " << this->getDato("codigosnies") << endl;
     cout << "Nombre del programa académico: " << this->getDato("programaacademico") << endl;
 }
-
-
-
-
-

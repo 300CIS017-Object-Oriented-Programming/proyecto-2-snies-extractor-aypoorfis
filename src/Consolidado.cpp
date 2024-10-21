@@ -1,4 +1,3 @@
-
 #include "Consolidado.h"
 #include <iostream>
 #include <string>
@@ -77,5 +76,3 @@ void Consolidado::setParametros(const map<string,string> &parametros) {
     }
 
 }
-
-

@@ -19,7 +19,7 @@ private:
     int matriculadosPrimerSemestre = 0;
     int graduados = 0;
 
-    bool verificarMapaValido(const map<string, string> &) ;
+    static bool verificarMapaValido(const map<string, string> &);
 public:
     Consolidado() = default;
     Consolidado(int idSexo, string sexo, int ano, int semestre);
