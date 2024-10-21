@@ -19,7 +19,7 @@ private:
     int matriculadosPrimerSemestre = 0;
     int graduados = 0;
 
-    bool verificarMapaValido(const map<string, string> &) ;
+    bool verificarMapaValido(const map<string, string> &parametros) const;;
 public:
     Consolidado() = default;
     Consolidado(int idSexo, string sexo, int ano, int semestre);
@@ -35,6 +35,7 @@ public:
     int getMatriculados() const;
     int getMatriculadosPrimerSemestre() const;
     int getGraduados() const;
+
     // Este metodo se encarga de inicializar los atributos
     // (Inscritos, Admitidos, Matriculados, MatriculadosPrimerSemestre, Graduados)
     // de la clase con los valores que se encuentran en el vector de parametrosConsolidado

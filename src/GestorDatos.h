@@ -8,8 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
-
-#include "Settings.h" // lo agrego pero no se muy bien como utilizara la clase aqui.
+#include "ProgramaAcademico.h"
 
 using std::string;
 using std::map;
@@ -21,7 +20,7 @@ public:
     // Destructor
     virtual ~GestorDatos() = default;
     // Metodo para escribir datos procesados en un archivo
-    virtual void exportarDatos(const string& filePath, const vector<map<string, string>>& datos) = 0;
+    virtual void exportarDatos(map<string, ProgramaAcademico*>) = 0;
 
 protected:
     // Metodo de ayuda para manejar errores comunes
