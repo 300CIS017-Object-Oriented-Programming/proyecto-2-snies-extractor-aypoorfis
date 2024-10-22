@@ -3,43 +3,32 @@
 
 #include <string>
 #include <map>
+#include <bits/stl_vector.h>
 
 using std::string;
 using std::map;
+using std::vector;
 
 class Consolidado {
 private:
-    int idSexo = 0;
-    string sexo;
-    int anio = 0;
-    int semestre = 0;
-    int inscritos = 0;
-    int admitidos = 0;
-    int matriculados = 0;
-    int matriculadosPrimerSemestre = 0;
-    int graduados = 0;
+    // Este mapa contendría los valores de los atributos de la clase:
+    // idsexo, genero, anio, semestre, inscritos, admitidos, matriculados, matriculadosprimersemestre, graduados
+    map<string, string>datosConsolidado;
 
-    bool verificarMapaValido(const map<string, string> &parametros) const;;
 public:
     Consolidado() = default;
-    Consolidado(int idSexo, string sexo, int ano, int semestre);
-
+    Consolidado(vector<string> &etiquetas);
     // Mantenimiento: Gran cantidad de métodos get y set que tal vez no son estrictamente necesarios
-    // Cambio: Se quitaron algunos sets de la clase.
-    int getIdSexo() const;
-    string getSexo() const;
-    int getAnio() const;
-    int getSemestre() const;
-    int getInscritos() const;
-    int getAdmitidos() const;
-    int getMatriculados() const;
-    int getMatriculadosPrimerSemestre() const;
-    int getGraduados() const;
+    // Cambio: Se quitaron algunos sets de la clase Consolidado
+
+    // Este metodo se encarga de devolver el valor del atributo idsexo, que es el único que no es un número
+    string getGenero() const;
+    int getDatoNumerico(string const &dato) const;
 
     // Este metodo se encarga de inicializar los atributos
     // (Inscritos, Admitidos, Matriculados, MatriculadosPrimerSemestre, Graduados)
     // de la clase con los valores que se encuentran en el vector de parametrosConsolidado
-    void setParametros(const map<string, string> &parametros);
+    void setDato(string dato, string valor);
 };
 
 #endif // CONSOLIDADO_H
