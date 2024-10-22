@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <cctype>
-
+#include <algorithm>
 using std::vector;
 using std::string;
 using std::ifstream;
@@ -13,6 +13,9 @@ using std::stringstream;
 using std::unordered_map;
 using std::cout;
 using std::endl;
+
+using namespace std;
+
 
 string GestorCsv::convertirStringFormaEstandar(const string &input) {
     static const unordered_map<char, char> tildesMap = {
@@ -122,15 +125,44 @@ void GestorCsv::inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*
     archivoProgramasCsv.close();
 }
 
+void adjuntarDatosProgramaAcademico(vector<string> &llaves, vector<string> &valores, ProgramaAcademico &programa) {
+
+    vector<string> llavesEspeciales = { "inscritos", "admitidos", "matriculados",
+                                        "matriculadosPrimerSemestre", "graduados" };
+    
+    // Un Consolidado para almacenar los datos especiales
+    Consolidado* consolidado = new Consolidado();
+
+    // Es suficiente con recorrer las llavees ya que los dos vectoes tiene el mismo tamaño
+    for (int i = 0; i < llaves.size(); ++i) {
+        string &llave = llaves[i];
+        string &valor = valores[i];
+
+        // Verificar si la llave es especial
+        if (find(llavesEspeciales.begin(), llavesEspeciales.end(), llave) != llavesEspeciales.end()) {
+            // Agregar al Consolidado
+            map<string, string> parametros;
+            parametros[llave] = valor;
+
+            consolidado->setParametros(parametros);
+
+        } else {
+            // Agregar el dato directamente al ProgramaAcademico
+            programa.setDato(llave, valor);
+        }
+    }
+
+    // Agregar el Consolidado al programa (asumiendo semestre 0 para este ejemplo)
+    programa.addConsolidado(0, consolidado);
+}
+
 void GestorCsv::adjuntarDatosArchivo(string &ruta, map<string, ProgramaAcademico*> &programas) {
 
     ifstream archivo(ruta);
-
     if (!archivo.is_open()) {
         cout << "Archivo " << ruta << " no se pudo abrir correctamente" << endl;
         return;
     }
-
     string linea;
     vector<string> nombresColumnas;
     bool primeraLinea = true;
@@ -159,7 +191,6 @@ void GestorCsv::adjuntarDatosArchivo(string &ruta, map<string, ProgramaAcademico
 
     archivo.close();
 }
-
 
 /*
 void GestorCsv::adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &datos) {
