@@ -122,6 +122,45 @@ void GestorCsv::inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*
     archivoProgramasCsv.close();
 }
 
+void GestorCsv::adjuntarDatosArchivo(string &ruta, map<string, ProgramaAcademico*> &programas) {
+
+    ifstream archivo(ruta);
+
+    if (!archivo.is_open()) {
+        cout << "Archivo " << ruta << " no se pudo abrir correctamente" << endl;
+        return;
+    }
+
+    string linea;
+    vector<string> nombresColumnas;
+    bool primeraLinea = true;
+
+    while (getline(archivo, linea)) {
+        vector<string> datosFila = dividirLineaCSV(linea);
+
+        if (primeraLinea) {
+            nombresColumnas = datosFila;
+            primeraLinea = false;
+            continue;
+        }
+
+        vector<string> datosEstandarizados = convertirVectorFormaEstandar(datosFila);
+        string nombreProgramaEstandarizado = convertirStringFormaEstandar(datosEstandarizados[0]);
+
+        auto it = programas.find(nombreProgramaEstandarizado);
+
+        if (it != programas.end()) {
+            adjuntarDatosProgramaAcademico(nombresColumnas, datosEstandarizados, *(it->second));
+        } else {
+            throw runtime_error("Programa académico no encontrado en el mapa: " + nombreProgramaEstandarizado);
+        }
+    }
+
+    archivo.close();
+}
+
+
+/*
 void GestorCsv::adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &datos) {
     // File paths from Settings
     vector<string> filePaths = {
@@ -186,6 +225,7 @@ void GestorCsv::adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &datos) {
         file.close();
     }
 }
+*/
 
 
 
