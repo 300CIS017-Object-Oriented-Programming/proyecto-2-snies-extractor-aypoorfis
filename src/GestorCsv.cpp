@@ -147,6 +147,7 @@ void GestorCsv::adjuntarDatosArchivo(string &ruta, map<string, ProgramaAcademico
         vector<string> datosEstandarizados = convertirVectorFormaEstandar(datosFila);
         string nombreProgramaEstandarizado = convertirStringFormaEstandar(datosEstandarizados[0]);
 
+        // se encuentra el programa académico en el mapa
         auto it = programas.find(nombreProgramaEstandarizado);
 
         if (it != programas.end()) {
