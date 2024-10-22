@@ -125,47 +125,37 @@ void GestorCsv::inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*
     archivoProgramasCsv.close();
 }
 
-void adjuntarDatosProgramaAcademico(vector<string> &vectorKeys, vector<string> &VectorValues, ProgramaAcademico &ProgramAcademic){
-    
-    vector<string> DatosEstudiantes = { "sexo","anio","semestre","inscritos","admitidos",
-                                        "matriculados","matriculadosPrimerSemestre","graduados"};
-    
-    vector<string> llavesEspeciales = {"inscritos", "admitidos", "matriculados",
-                                        "matriculadosprimersemestre", "graduados"};
-    map<string, string> mapaConsolidados;
+void adjuntarDatosProgramaAcademico(vector<string> &llaves, vector<string> &valores, ProgramaAcademico &programa) {
 
-    for (int i = 0; i < vectorKeys.size(); i++)
-    {
-        
-        if (find(DatosEstudiantes.begin(),DatosEstudiantes.end(),DatosEstudiantes[i]) != DatosEstudiantes.end()){
-            Consolidado NewConsolidado;
-            NewConsolidado
-            ProgramAcademic.
+    vector<string> llavesEspeciales = { "inscritos", "admitidos", "matriculados",
+                                        "matriculadosPrimerSemestre", "graduados" };
+    
+    // Un Consolidado para almacenar los datos especiales
+    Consolidado* consolidado = new Consolidado();
 
-        }
-    }
- 
-    for (size_t i = 0; i < llaves.size(); ++i) {
+    // Es suficiente con recorrer las llavees ya que los dos vectoes tiene el mismo tamaño
+    for (int i = 0; i < llaves.size(); ++i) {
         string &llave = llaves[i];
         string &valor = valores[i];
 
         // Verificar si la llave es especial
         if (find(llavesEspeciales.begin(), llavesEspeciales.end(), llave) != llavesEspeciales.end()) {
-            // Agregar al mapa de consolidado
-            mapaConsolidados[llave] = valor;
+            // Agregar al Consolidado
+            map<string, string> parametros;
+            parametros[llave] = valor;
+
+            consolidado->setParametros(parametros);
+
         } else {
-            // Agregar al ProgramaAcademico
+            // Agregar el dato directamente al ProgramaAcademico
             programa.setDato(llave, valor);
         }
     }
 
-    // Si hay llaves especiales, crear y agregar el Consolidado
-    if (!mapaConsolidados.empty()) {
-        Consolidado* consolidado = new Consolidado();
-        consolidado->setParametros(mapaConsolidados);
-        programa.addConsolidado(0, consolidado); // Asumimos semestre 0 para este ejemplo
-    }
+    // Agregar el Consolidado al programa (asumiendo semestre 0 para este ejemplo)
+    programa.addConsolidado(0, consolidado);
 }
+
     
 void GestorCsv::adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &datos) {
     // File paths from Settings
