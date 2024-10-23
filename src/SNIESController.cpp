@@ -22,39 +22,6 @@ void SNIESController::procesarDatosCsv() {
     GestorCsv::adjuntarTodosLosDatos(programasAcademicos);
 }
 
-
-void SNIESController::buscarProgramas(bool flag, const string& criterio, int valor) {
-    vector<ProgramaAcademico*> resultados;
-
-    for (auto& pair : programasAcademicos) {
-        ProgramaAcademico* programa = pair.second;
-
-        if (criterio == "totalMatriculados") {
-            int totalMatriculados = stoi(programa->getDato("totalMatriculados"));
-            if (totalMatriculados == valor) {
-                resultados.push_back(programa);
-            }
-        } else if (criterio == "nuevosMatriculados") {
-            int nuevosMatriculados = stoi(programa->getDato("nuevosMatriculados"));
-            if (nuevosMatriculados == valor) {
-                resultados.push_back(programa);
-            }
-        }
-    }
-
-    for (ProgramaAcademico* programa : resultados) {
-        programa->mostrarIdentificadoresPrograma();
-    }
-
-    if (flag) {
-        map<string, ProgramaAcademico*> resultadosMap;
-        for (ProgramaAcademico* programa : resultados) {
-            resultadosMap[programa->getDato("codigosnies")] = programa;
-        }
-        gestorCsvObj.exportarDatos(resultadosMap);
-    }
-}
-
 void SNIESController::filtrarProgramas(const string& palabraClave, const string& nivelFormacion, bool exportarCSV) {
     vector<ProgramaAcademico*> resultados;
 
@@ -87,7 +54,7 @@ void SNIESController::filtrarProgramas(const string& palabraClave, const string&
     }
 }
 
-void SNIESController::exportarDatos(const string& rutaOutput, const vector<vector<string>>& matrizFinal, const string& formato) {
+void SNIESController::exportarDatos(const string& formato) {
     if (formato == "CSV") {
         gestorCsvObj.exportarDatos(programasAcademicos);
     } else if (formato == "TXT") {
