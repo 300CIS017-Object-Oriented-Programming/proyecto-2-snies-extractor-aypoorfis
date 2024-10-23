@@ -20,13 +20,7 @@ private:
     GestorTxt gestorTxtObj;
     GestorJson gestorJsonObj;
 
-    // Métodos auxiliares
-    // Procesa los consolidados de los programas académicos, "i" es el índice del consolidado actual.
-    void procesarConsolidados(ProgramaAcademico* programa, int i, int& sumaNeosSemestre);
-    void exportarDatos(const string& rutaOutput, const vector<vector<string>>& matrizFinal, const string& formato);
-
 public:
-
 
     SNIESController() = default;
 
@@ -37,6 +31,9 @@ public:
     // Si el bool está activada, exporta los datos procesados a un archivo CSV,
     // de lo contrario, solo los calcula.
     void filtrarProgramas(const string &palabraClave, const string &nivelFormacion, bool exportarCSV);
+
+    // Métodos auxiliares
+    void exportarDatos(const string &formato);
 };
 
 #endif // SNIES_CONTROLLER_H
