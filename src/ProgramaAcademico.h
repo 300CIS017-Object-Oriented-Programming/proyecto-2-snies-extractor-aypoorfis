@@ -23,6 +23,8 @@ public:
     string getDato(string const &);
 
     bool sinMatriculasNuevas() const;
+    bool contienePalabraClave(string const &) const;
+    bool tieneNivelDeFormacion(string const &) const;
     void addConsolidado(string const &, Consolidado *);
     void modificarConsolidado(string const &, string const &, string const &);
 
@@ -31,6 +33,9 @@ public:
     void mostrarDiferenciaPorcentualNuevosMatriculados() const;
     // Esta función muestra el código SNIES y el nombre del programa académico.
     void mostrarIdentificadoresPrograma();
+    // Esta función muestra el código SNIES, nombre del programa, código de la institución, nombre de la institución
+    // y metodologia de formación.
+    void mostrarInformacionPrincipalPrograma();
 };
 
 #endif
