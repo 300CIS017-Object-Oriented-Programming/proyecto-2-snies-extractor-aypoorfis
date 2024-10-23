@@ -17,7 +17,7 @@ private:
 
 public:
     Consolidado() = default;
-    Consolidado(vector<string> &etiquetas);
+    Consolidado(const vector<string> &etiquetas);
     // Mantenimiento: Gran cantidad de métodos get y set que tal vez no son estrictamente necesarios
     // Cambio: Se quitaron algunos sets de la clase Consolidado
 

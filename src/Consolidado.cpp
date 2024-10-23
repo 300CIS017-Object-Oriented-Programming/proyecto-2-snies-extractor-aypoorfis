@@ -12,10 +12,10 @@ using std::cerr;
 using std::endl;
 using std::cout;
 
-Consolidado::Consolidado(vector<string> &etiquetas) {
+Consolidado::Consolidado(const vector<string> &etiquetas) {
     int NUMERO_DE_ETIQUETAS = 9;
     if(etiquetas.size() == NUMERO_DE_ETIQUETAS) {
-        for(auto &etiqueta : etiquetas) {
+        for(auto const &etiqueta : etiquetas) {
             datosConsolidado[etiqueta] = "";
         }
     }
