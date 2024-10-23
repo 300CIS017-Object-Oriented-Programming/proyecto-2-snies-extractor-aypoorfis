@@ -6,23 +6,32 @@
 #include <string>
 #include "ProgramaAcademico.h"
 #include "GestorCsv.h"
+#include "GestorTxt.h"
+#include "GestorJson.h"
 
 using std::map;
 using std::string;
-#include "Settings.h"
+using std::vector;
 
 class SNIESController {
-
 private:
     map<long, ProgramaAcademico *> programasAcademicos;
     GestorCsv gestorCsvObj;
+    GestorTxt gestorTxtObj;
+    GestorJson gestorJsonObj;
+
+    // Métodos auxiliares
+    void procesarConsolidados(ProgramaAcademico* programa, int i, int& sumaNeosSemestre);
+    void exportarDatos(const string& rutaOutput, const vector<vector<string>>& matrizFinal, const string& formato);
+
 public:
     SNIESController() = default;
+
     ~SNIESController();
-    void procesarDatosCsv(string &, string &);
-    // Mantenimiento: Este método tiene un nombre confuso.
-    void calcularDatosExtra(bool);
-    void buscarProgramas(bool, string &, int);
+
+    void procesarDatosCsv(const string& rutaInput, const string& rutaOutput);
+    void calcularDatosExtra(bool flag);
+    void buscarProgramas(bool flag, const string& criterio, int valor);
 };
 
-#endif
+#endif // SNIES_CONTROLLER_H

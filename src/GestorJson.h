@@ -17,7 +17,7 @@ using std::vector;
 
 class GestorJson : public GestorDatos {
 public:
-    void exportarDatos(const std::string& filePath, const std::vector<std::map<std::string, std::string>>& datos) override;
+    void exportarDatos(map<string, ProgramaAcademico*> datos) override;
 };
 
 #endif // GESTOR_JSON_H

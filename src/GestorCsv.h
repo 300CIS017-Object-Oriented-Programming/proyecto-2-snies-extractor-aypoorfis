@@ -40,7 +40,7 @@ public:
     // Esta función adjunta todos los datos de los programas de análisis de todos los archivos CSV a un mapa.
     static void adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &);
     // Esta función exporta los datos de los programas de análisis a un archivo CSV.
-    void exportarDatos(map<string, ProgramaAcademico*> &);
+    void exportarDatos(map<string, ProgramaAcademico*> datos) override;
 };
 
 #endif
