@@ -1,45 +1,45 @@
 //
 // Created by User on 14/10/2024.
 //
-
 #include "GestorTxt.h"
-
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 
-using std::string;
-using std::map;
-using std::vector;
+using namespace std;
 
-void GestorTxt::exportarDatos(const string& filePath, const vector<map<string, string>>& datos) {
+void GestorJson::exportarDatos(map<string, ProgramaAcademico*> datos) {
     try {
-        std::ofstream file(filePath);
+        ofstream file("output.json");
         if (!file.is_open()) {
-            throw std::ios_base::failure("No se pudo abrir el archivo TXT para exportar: " + filePath);
+            throw ios_base::failure("No se pudo abrir el archivo JSON para exportar: output.json");
         }
 
-        for (auto entryIter = datos.begin(); entryIter != datos.end(); ++entryIter) {
-            const auto& entry = *entryIter;
-            for (auto pairIter = entry.begin(); pairIter != entry.end(); ++pairIter) {
-                const auto& key = pairIter->first;
-                const auto& value = pairIter->second;
-                file << key << ": " << value << "\n";
+        file << "{\n";
+        for (auto it = datos.begin(); it != datos.end(); ++it) {
+            ProgramaAcademico* programa = it->second;
+            file << "  \"" << it->first << "\": {\n";
+            file << "    \"codigoSNIES\": \"" << programa->getDato("codigosnies") << "\",\n";
+            file << "    \"nombrePrograma\": \"" << programa->getDato("programaacademico") << "\",\n";
+            file << "    \"consolidados\": [\n";
+            programa->mostrarMatriculadosConsolidado({2010, 2020}); // Ejemplo de rango de años
+            programa->mostrarDiferenciaPorcentualNuevosMatriculados({2010, 2020}); // Ejemplo de rango de años
+            file << "    ]\n";
+            file << "  }";
+            if (std::next(it) != datos.end()) {
+                file << ",";
             }
-            file << "--------------------------\n"; // Separador de entradas
+            file << "\n";
         }
-
+        file << "}\n";
 
         file.close();
-        cout << "Exportación a TXT exitosa: " << filePath << endl;
-    }
-    catch (const std::ios_base::failure& e) {
-        std::cerr << "Error de archivo: " << e.what() << endl;
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Error inesperado: " << e.what() << std::endl;
-    }
-    catch (...) {
-        std::cerr << "Ocurrió un error desconocido durante la exportación a TXT." << std::endl;
+        cout << "Exportación a JSON exitosa: output.json" << std::endl;
+    } catch (const std::ios_base::failure& e) {
+        cerr << "Error de archivo: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        cerr << "Error inesperado: " << e.what() << std::endl;
+    } catch (...) {
+        cerr << "Ocurrió un error desconocido durante la exportación a JSON." << std::endl;
     }
 }

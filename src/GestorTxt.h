@@ -14,7 +14,7 @@ using std::vector;
 class GestorTxt : public GestorDatos {
 public:
 
-    void exportarDatos(const string& filePath, const vector<map<string, string>>& datos) override;
+    void exportarDatos(map<string, ProgramaAcademico*> datos) override;
 };
 
 
