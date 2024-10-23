@@ -72,15 +72,16 @@ bool ProgramaAcademico::sinMatriculasNuevas() const {
     return false;
 }
 
-void ProgramaAcademico::addConsolidado(string const &anioSemestre, Consolidado *consolidado) {
-    consolidados[anioSemestre] = consolidado;
+void ProgramaAcademico::addConsolidado(string const &anioSemestreGenero, Consolidado *consolidado) {
+    consolidados[anioSemestreGenero] = consolidado;
 }
 
-void ProgramaAcademico::modificarConsolidado(string const &anioSemestre) {
-    auto it = consolidados.find(anioSemestre);
+void ProgramaAcademico::modificarConsolidado(string const &anioSemestreGenero, string const &llave, string const &valor) {
+    auto it = consolidados.find(anioSemestreGenero);
     if (it != consolidados.end()) {
-        delete it->second;
-        consolidados.erase(it);
+        it->second->setDato(llave, valor);
+    } else {
+        throw std::invalid_argument("No se encontró el consolidado para el año, semestre y género indicado");
     }
 }
 

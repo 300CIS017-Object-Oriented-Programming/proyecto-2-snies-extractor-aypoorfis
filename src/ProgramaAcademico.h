@@ -13,7 +13,7 @@ class ProgramaAcademico {
     map<string, string> datos;
     map<string, Consolidado *> consolidados;
     int getMatriculadosNuevosPorSemestre(int) const;
-    int getMatriculadosNuevosPorAnio(int anio) const;
+    int getMatriculadosNuevosPorAnio(int) const;
     int getMatriculadosPorSemestre(int) const;
     int getMatriculadosPorAnio(int) const;
 public:
@@ -24,7 +24,7 @@ public:
 
     bool sinMatriculasNuevas() const;
     void addConsolidado(string const &, Consolidado *);
-    void modificarConsolidado(string const &);
+    void modificarConsolidado(string const &, string const &, string const &);
 
     // Estas funciones se encargan de mostrar los datos de los consolidados en los años correspondientes.
     void mostrarMatriculadosConsolidado();
