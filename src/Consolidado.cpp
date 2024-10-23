@@ -12,67 +12,33 @@ using std::cerr;
 using std::endl;
 using std::cout;
 
-Consolidado::Consolidado(const int idSexo, string sexo, int anio, const int semestre) :
-idSexo(idSexo), sexo(std::move(sexo)), anio(anio), semestre(semestre), inscritos(0), admitidos(0), matriculados(0), matriculadosPrimerSemestre(0), graduados(0) {}
-
-int Consolidado::getIdSexo() const {
-    return idSexo;
-}
-
-string Consolidado::getSexo() const {
-    return sexo;
-}
-
-int Consolidado::getAnio() const {
-    return anio;
-}
-
-int Consolidado::getSemestre() const {
-    return semestre;
-}
-
-int Consolidado::getInscritos() const {
-    return inscritos;
-}
-
-int Consolidado::getAdmitidos() const {
-    return admitidos;
-}
-
-int Consolidado::getMatriculados() const {
-    return matriculados;
-}
-
-int Consolidado::getMatriculadosPrimerSemestre() const {
-    return matriculadosPrimerSemestre;
-}
-
-int Consolidado::getGraduados() const {
-    return graduados;
-}
-
-bool Consolidado::verificarMapaValido(const map<string, string> &parametros) const{
-    const vector<string> LLAVESVALIDAS  = {"inscritos", "admitidos", "matriculados", "matriculadosprimersemestre", "graduados"};
-    int i = 0;
-    bool esValido = true;
-    while(i < LLAVESVALIDAS.size() && esValido) {
-        if(parametros.find(LLAVESVALIDAS[i]) == parametros.end()) {
-            esValido = false;
+Consolidado::Consolidado(vector<string> &etiquetas) {
+    int NUMERO_DE_ETIQUETAS = 9;
+    if(etiquetas.size() == NUMERO_DE_ETIQUETAS) {
+        for(auto &etiqueta : etiquetas) {
+            datosConsolidado[etiqueta] = "";
         }
-        i++;
     }
-    return esValido;
+    else {
+        throw std::invalid_argument("El número de etiquetas para el consolidado no es el correcto.");
+    }
 }
 
-void Consolidado::setParametros(const map<string,string> &parametros) {
-    if(verificarMapaValido(parametros)) {
-        inscritos = stoi(parametros.at("inscritos"));
-        admitidos = stoi(parametros.at("admitidos"));
-        matriculados = stoi(parametros.at("matriculados"));
-        matriculadosPrimerSemestre = stoi(parametros.at("matriculadosprimersemestre"));
-        graduados = stoi(parametros.at("graduados"));
-    } else {
-       throw std::invalid_argument("Los parámetros del consolidado no están donde deberían estar.");
+int Consolidado::getDatoNumerico(string const &etiquetaDato) const {
+    string LLAVE_DATO = etiquetaDato;
+    auto it = datosConsolidado.find(LLAVE_DATO);
+    if(it != datosConsolidado.end()) {
+        return stoi(it->second);
     }
+    const string mensajeError = "El atributo " + etiquetaDato + " no está en el mapa de datos del consolidado.";
+    throw std::invalid_argument(mensajeError);
+}
 
+string Consolidado::getGenero() const {
+    string LLAVE_SEXO = "genero";
+    auto it = datosConsolidado.find(LLAVE_SEXO);
+    if(it != datosConsolidado.end()) {
+        return it->second;
+    }
+    throw std::invalid_argument("El atributo genero no está en el mapa de datos del consolidado");
 }

@@ -1,6 +1,9 @@
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
+#include "Settings.h"
 #include <iostream>
+#include <string>
+#include <map>
 
 
 using std::string;
@@ -24,28 +27,49 @@ string ProgramaAcademico::getDato(string const &atributo) {
     return datos[atributo];
 }
 
+int ProgramaAcademico::getMatriculasNuevasSemestre(string &anioSemestre) {
+    int resultado = 0;
+    // Este vector contiene los géneros M: Masculino, F: Femenino, T: Transgénero, O: Otro
+    vector<string> generos = {"M", "F", "T", "O"};
+
+    for (const auto &genero : generos) {
+        auto it = consolidados.find(anioSemestre + genero);
+        if (it != consolidados.end()) {
+            resultado += it->second->getDatoNumerico("matriculados");
+        }
+    }
+    return resultado;
+}
 
 bool ProgramaAcademico::sinMatriculasNuevas() const {
+    int ANIOINICIAL = 2020; // Ajusta estos valores según sea necesario
+    int ANIOFINAL = 2022;   // Ajusta estos valores según sea necesario
     bool sinMatriculas = false;
     int contador = 0;
-    auto it = consolidados.begin();
-    while (it != consolidados.end() && !sinMatriculas) {
-        if (it->second->getMatriculados() == 0) {
-            contador++;
-            if (contador == 3) {
-                sinMatriculas = true;
+
+    for (int anio = ANIOINICIAL; anio <= ANIOFINAL; ++anio) {
+        for (int semestre = 1; semestre <= 2; ++semestre) {
+            string anioSemestre = std::to_string(anio) + std::to_string(semestre);
+            if (getMatriculasNuevasSemestre(anioSemestre) == 0) {
+                contador++;
+                if (contador == 3) {
+                    sinMatriculas = true;
+                    break;
+                }
+            } else {
+                contador = 0;
             }
-        } else {
-            contador = 0;
         }
-        ++it;
+        if (sinMatriculas) {
+            break;
+        }
     }
     return sinMatriculas;
 }
 
 
-void ProgramaAcademico::addConsolidado(int semestre, Consolidado *consolidado) {
-    consolidados[semestre] = consolidado;
+void ProgramaAcademico::addConsolidado(string const &anioSemestre, Consolidado *consolidado) {
+    consolidados[anioSemestre] = consolidado;
 }
 
 

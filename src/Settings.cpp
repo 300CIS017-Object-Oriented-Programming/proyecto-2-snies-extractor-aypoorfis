@@ -1,11 +1,7 @@
-//
-// Created by User on 13/10/2024.
-//
 #include "Settings.h"
 #include <string>
 
-using namespace std;
-
+using std::string;
 
 // Inicialización de las variables estáticas
 string Settings::BASE_PATH = "C:/SNIES_EXTRACTOR/inputs/";
@@ -13,9 +9,12 @@ string Settings::PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "programas.csv";
 string Settings::ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
 string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados";
 string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "inscritos";
-char Settings::DELIMITADOR = ";";
-
 string Settings::GRADUADOS_FILE_PATH = BASE_PATH + "graduados";
+string Settings::EXTENSION_ARCHIVOS = ".csv";
+char Settings::DELIMITADOR = ';';
+int Settings::ANIO_INICIAL = 2010;
+int Settings::ANIO_FINAL = 2020;
+
 
 // Implementación de los métodos setters
 void Settings::setBasePath(const string& newPath) {
@@ -28,7 +27,53 @@ void Settings::setBasePath(const string& newPath) {
     GRADUADOS_FILE_PATH = BASE_PATH + "graduados";
 }
 
-void Settings::setDelimitador(const std::string& newDelimitador) {
-    DELIMITADOR = newDelimitador; // Modificar el delimitador
+void Settings::setDelimitador(const char& newDelimitador) {
+    DELIMITADOR = newDelimitador;
 }
+
+void Settings::setAnioInicial(const string &newAnioInicial) {
+    ANIO_INICIAL = stoi(newAnioInicial);
+}
+
+void Settings::setAnioFinal(const string &newAnioFinal) {
+    ANIO_FINAL = stoi(newAnioFinal);
+}
+
+void Settings::setAnioAdmitidos(const string &newAnioRuta) {
+    ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos" + newAnioRuta + EXTENSION_ARCHIVOS;
+}
+
+void Settings::setAnioMatriculados(const string &newAnioRuta) {
+    MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados" + newAnioRuta + EXTENSION_ARCHIVOS;
+}
+
+void Settings::setAnioInscritos(const string &newAnioRuta) {
+    INSCRITOS_FILE_PATH = BASE_PATH + "inscritos" + newAnioRuta + EXTENSION_ARCHIVOS;
+}
+
+void Settings::setAnioGraduados(const string &newAnioRuta) {
+    GRADUADOS_FILE_PATH = BASE_PATH + "graduados" + newAnioRuta + EXTENSION_ARCHIVOS;
+}
+
+// Implementación de los métodos getters
+string Settings::getAdmitidosFilePath() {
+    return ADMITIDOS_FILE_PATH;
+}
+
+string Settings::getMatriculadosFilePath() {
+    return MATRICULADOS_FILE_PATH;
+}
+
+string Settings::getInscritosFilePath() {
+    return INSCRITOS_FILE_PATH;
+}
+
+string Settings::getProgramasFiltrarFilePath() {
+    return PROGRAMAS_FILTRAR_FILE_PATH;
+}
+
+string Settings::getGraduadosFilePath() {
+    return GRADUADOS_FILE_PATH;
+}
+
 

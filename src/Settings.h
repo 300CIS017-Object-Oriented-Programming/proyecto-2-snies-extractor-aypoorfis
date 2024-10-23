@@ -16,27 +16,40 @@
  *
  */
 
-
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
 #include <string>
-using namespace std;
 
-class Settings
-{
+using std::string;
+
+class Settings {
 public:
     // En la clase Settings, las variables ADMITIDOS_FILE_PATH, MATRICULADOS_FILE_PATH y ETC se declaran como static const std::string. Esto significa que son constantes de tipo string que pertenecen a la clase en lugar de a instancias individuales de la clase.
     static  string ADMITIDOS_FILE_PATH;
     static  string MATRICULADOS_FILE_PATH;
     static  string INSCRITOS_FILE_PATH;
     static  string PROGRAMAS_FILTRAR_FILE_PATH;
-    static  string BASE_PATH;
-    static char DELIMITADOR;
     static  string GRADUADOS_FILE_PATH;
+    static  string BASE_PATH;
+    static string EXTENSION_ARCHIVOS;
+    static char DELIMITADOR;
+    static int ANIO_INICIAL;
+    static int ANIO_FINAL;
 
-    static void setBasePath(const std::string& newPath);
-    static void setDelimitador(const std::string& newDelimitador);
-    // FIXME completar para el resto de constantes
+    static void setBasePath(const string& newPath);
+    static void setDelimitador(const char& newDelimitador);
+    static void setAnioInicial(const string& newAnioInicial);
+    static void setAnioFinal(const string& newAnioFinal);
+    static void setAnioAdmitidos(const string& newAnioRuta);
+    static void setAnioMatriculados(const string& newAnioRuta);
+    static void setAnioInscritos(const string& newAnioRuta);
+    static void setAnioGraduados(const string& newAnioRuta);
+    static string getAdmitidosFilePath();
+    static string getMatriculadosFilePath();
+    static string getInscritosFilePath();
+    static string getProgramasFiltrarFilePath();
+    static string getGraduadosFilePath();
+
 };
 #endif // SETTINGS_H
