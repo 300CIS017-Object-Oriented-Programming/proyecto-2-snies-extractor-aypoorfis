@@ -47,16 +47,38 @@ void SNIESController::calcularDatosExtra(bool flag) {
 }
 
 void SNIESController::buscarProgramas(bool flag, const string& criterio, int valor) {
-    // Implementación de búsqueda de programas académicos
+    vector<ProgramaAcademico*> resultados;
+
     for (auto& pair : programasAcademicos) {
         ProgramaAcademico* programa = pair.second;
-        // Lógica para buscar programas basados en el criterio y valor
-        // ...
+
+        // Comparar el criterio y el valor con los datos del programa
+        if (criterio == "totalMatriculados") {
+            int totalMatriculados = stoi(programa->getDato("totalMatriculados"));
+            if (totalMatriculados == valor) {
+                resultados.push_back(programa);
+            }
+        } else if (criterio == "nuevosMatriculados") {
+            int nuevosMatriculados = stoi(programa->getDato("nuevosMatriculados"));
+            if (nuevosMatriculados == valor) {
+                resultados.push_back(programa);
+            }
+        }
+        // Agregar más criterios según sea necesario
+    }
+
+    // Imprimir los resultados de la búsqueda
+    for (ProgramaAcademico* programa : resultados) {
+        programa->mostrarIdentificadoresPrograma();
     }
 
     if (flag) {
         // Exportar resultados de búsqueda si la flag está activada
-        // ...
+        map<string, ProgramaAcademico*> resultadosMap;
+        for (ProgramaAcademico* programa : resultados) {
+            resultadosMap[programa->getDato("codigosnies")] = programa;
+        }
+        gestorCsvObj.exportarDatos(resultadosMap);
     }
 }
 
