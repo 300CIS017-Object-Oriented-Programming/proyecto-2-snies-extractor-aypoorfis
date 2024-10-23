@@ -12,21 +12,23 @@ using std::pair;
 class ProgramaAcademico {
     map<string, string> datos;
     map<string, Consolidado *> consolidados;
-    int getTotalMatriculadosPorAnio(int);
-    int getNuevosMatriculadosPorAnio(int);
+    int getMatriculadosNuevosPorSemestre(int) const;
+    int getMatriculadosNuevosPorAnio(int) const;
+    int getMatriculadosPorSemestre(int) const;
+    int getMatriculadosPorAnio(int) const;
 public:
     ProgramaAcademico() = default;
     ~ProgramaAcademico();
     void setDato(string const &, string);
     string getDato(string const &);
-    int getMatriculasNuevasSemestre(string &);
+
     bool sinMatriculasNuevas() const;
     void addConsolidado(string const &, Consolidado *);
-    void modificarConsolidado(string const &);
+    void modificarConsolidado(string const &, string const &, string const &);
 
     // Estas funciones se encargan de mostrar los datos de los consolidados en los años correspondientes.
     void mostrarMatriculadosConsolidado();
-    void mostrarDiferenciaPorcentualNuevosMatriculados();
+    void mostrarDiferenciaPorcentualNuevosMatriculados() const;
     // Esta función muestra el código SNIES y el nombre del programa académico.
     void mostrarIdentificadoresPrograma();
 };
