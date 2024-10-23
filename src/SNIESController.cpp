@@ -22,47 +22,69 @@ void SNIESController::procesarDatosCsv() {
     GestorCsv::adjuntarTodosLosDatos(programasAcademicos);
 }
 
-void SNIESController::calcularDatosExtra(bool flag) {
-    for (auto& pair : programasAcademicos) {
-        ProgramaAcademico* programa = pair.second;
-
-        int totalMatriculados = 0;
-        int nuevosMatriculados = 0;
-
-        for (const auto& consolidadoPair : programa->consolidados) {
-            Consolidado* consolidado = consolidadoPair.second;
-            totalMatriculados += consolidado->getMatriculados();
-            nuevosMatriculados += consolidado->getMatriculadosPrimerSemestre();
-        }
-
-        // Guardar los datos calculados en el programa académico
-        programa->setDato("totalMatriculados", to_string(totalMatriculados));
-        programa->setDato("nuevosMatriculados", to_string(nuevosMatriculados));
-    }
-
-    if (flag) {
-        // Exportar datos adicionales si la flag está activada
-        gestorCsvObj.exportarDatos(programasAcademicos);
-    }
-}
 
 void SNIESController::buscarProgramas(bool flag, const string& criterio, int valor) {
-    // Implementación de búsqueda de programas académicos
+    vector<ProgramaAcademico*> resultados;
+
     for (auto& pair : programasAcademicos) {
         ProgramaAcademico* programa = pair.second;
-        // Lógica para buscar programas basados en el criterio y valor
-        // ...
+
+        if (criterio == "totalMatriculados") {
+            int totalMatriculados = stoi(programa->getDato("totalMatriculados"));
+            if (totalMatriculados == valor) {
+                resultados.push_back(programa);
+            }
+        } else if (criterio == "nuevosMatriculados") {
+            int nuevosMatriculados = stoi(programa->getDato("nuevosMatriculados"));
+            if (nuevosMatriculados == valor) {
+                resultados.push_back(programa);
+            }
+        }
+    }
+
+    for (ProgramaAcademico* programa : resultados) {
+        programa->mostrarIdentificadoresPrograma();
     }
 
     if (flag) {
-        // Exportar resultados de búsqueda si la flag está activada
-        // ...
+        map<string, ProgramaAcademico*> resultadosMap;
+        for (ProgramaAcademico* programa : resultados) {
+            resultadosMap[programa->getDato("codigosnies")] = programa;
+        }
+        gestorCsvObj.exportarDatos(resultadosMap);
     }
 }
 
-void SNIESController::procesarConsolidados(ProgramaAcademico* programa, int i, int& sumaNeosSemestre) {
-    // Implementación de procesamiento de consolidados
-    // ...
+void SNIESController::filtrarProgramas(const string& palabraClave, const string& nivelFormacion, bool exportarCSV) {
+    vector<ProgramaAcademico*> resultados;
+
+    for (auto& pair : programasAcademicos) {
+
+        ProgramaAcademico* programa = pair.second;
+        string nombrePrograma = programa->getDato("programaacademico");
+        string nivel = programa->getDato("nivelformacion");
+
+        if (nombrePrograma.find(palabraClave) != string::npos &&   nivel == nivelFormacion) {
+            resultados.push_back(programa);
+        }
+    }
+
+    for (ProgramaAcademico* programa : resultados) {
+        cout << "Código SNIES: " << programa->getDato("codigosnies") << endl;
+        cout << "Nombre del Programa: " << programa->getDato("programaacademico") << endl;
+        cout << "Código de la Institución: " << programa->getDato("codigoinstitucion") << endl;
+        cout << "Nombre de la Institución: " << programa->getDato("nombreinstitucion") << endl;
+        cout << "Metodología: " << programa->getDato("metodologia") << endl;
+        cout << "----------------------------------------" << endl;
+    }
+
+    if (exportarCSV) {
+        map<string, ProgramaAcademico*> resultadosMap;
+        for (ProgramaAcademico* programa : resultados) {
+            resultadosMap[programa->getDato("codigosnies")] = programa;
+        }
+        gestorCsvObj.exportarDatos(resultadosMap);
+    }
 }
 
 void SNIESController::exportarDatos(const string& rutaOutput, const vector<vector<string>>& matrizFinal, const string& formato) {

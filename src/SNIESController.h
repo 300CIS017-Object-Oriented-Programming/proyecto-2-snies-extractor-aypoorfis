@@ -33,10 +33,10 @@ public:
     ~SNIESController();
 
     void procesarDatosCsv();
-    // Si el flag está activada, exporta los datos procesados a un archivo CSV,
+
+    // Si el bool está activada, exporta los datos procesados a un archivo CSV,
     // de lo contrario, solo los calcula.
-    void calcularDatosExtra(bool flag);
-    void buscarProgramas(bool flag, const string& criterio, int valor);
+    void filtrarProgramas(const string &palabraClave, const string &nivelFormacion, bool exportarCSV);
 };
 
 #endif // SNIES_CONTROLLER_H

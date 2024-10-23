@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void GestorJson::exportarDatos(map<string, ProgramaAcademico*> datos) {
+void GestorTxt::exportarDatos(map<string, ProgramaAcademico*> datos) {
     try {
         ofstream file("output.json");
         if (!file.is_open()) {

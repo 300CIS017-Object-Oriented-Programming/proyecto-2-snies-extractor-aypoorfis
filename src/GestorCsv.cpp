@@ -191,7 +191,25 @@ void GestorCsv::adjuntarDatosArchivo(string &ruta, map<string, ProgramaAcademico
 
     archivo.close();
 }
+void GestorCsv::exportarDatos(map<string, ProgramaAcademico*> datos) {
+    ofstream file("output.csv");
+    if (!file.is_open()) {
+        throw ios_base::failure("No se pudo abrir el archivo CSV para exportar: output.csv");
+    }
 
+    file << "Código SNIES,Nombre del Programa,Código de la Institución,Nombre de la Institución,Metodología\n";
+    for (auto& pair : datos) {
+        ProgramaAcademico* programa = pair.second;
+        file << programa->getDato("codigosnies") << ","
+             << programa->getDato("programaacademico") << ","
+             << programa->getDato("codigoinstitucion") << ","
+             << programa->getDato("nombreinstitucion") << ","
+             << programa->getDato("metodologia") << "\n";
+    }
+
+    file.close();
+    cout << "Exportación a CSV exitosa: output.csv" << endl;
+}
 /*
 void GestorCsv::adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &datos) {
     // File paths from Settings
