@@ -72,6 +72,25 @@ bool ProgramaAcademico::sinMatriculasNuevas() const {
     return false;
 }
 
+bool ProgramaAcademico::contienePalabraClave(string const &palabraClave) const {
+    bool respuesta = false;
+    for (const auto &[key, value] : datos) {
+        if (value.find(palabraClave) != string::npos) {
+            respuesta = true;
+        }
+    }
+    return respuesta;
+}
+
+bool ProgramaAcademico::tieneNivelDeFormacion(string const &nivelFormacion) const {
+    string const LLAVENIVELFORMACION = "niveldeformacion";
+    auto it = datos.find(LLAVENIVELFORMACION);
+    if (it != datos.end()) {
+        return it->second == nivelFormacion;
+    }
+    throw std::invalid_argument("El atributo 'niveldeformacion' no está en el mapa de datos del programa académico.");
+}
+
 void ProgramaAcademico::addConsolidado(string const &anioSemestreGenero, Consolidado *consolidado) {
     consolidados[anioSemestreGenero] = consolidado;
 }
@@ -149,4 +168,14 @@ void ProgramaAcademico::mostrarIdentificadoresPrograma() {
     string const LLAVENOMBREPROGRAMAACADEMICO = "programaacademico";
     cout << "Código SNIES: " << this->getDato(LLAVECODIGOSNIES) << endl;
     cout << "Nombre del programa académico: " << this->getDato(LLAVENOMBREPROGRAMAACADEMICO) << endl;
+}
+
+void ProgramaAcademico::mostrarInformacionPrincipalPrograma() {
+    string const LLAVECODIGOINSTITUCION = "codigoinstitucion";
+    string const LLAVENOMBREINSTITUCION = "nombreinstitucion";
+    string const LLAVEMETODOLOGIAFORMACION = "metodoformacion";
+    mostrarIdentificadoresPrograma();
+    cout << "Código de la institución: " << this->getDato(LLAVECODIGOINSTITUCION) << endl;
+    cout << "Nombre de la institución: " << this->getDato(LLAVENOMBREINSTITUCION) << endl;
+    cout << "Metodología de formación: " << this->getDato(LLAVEMETODOLOGIAFORMACION) << endl;
 }
