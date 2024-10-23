@@ -26,23 +26,15 @@ void SNIESController::filtrarProgramas(const string& palabraClave, const string&
     vector<ProgramaAcademico*> resultados;
 
     for (auto& pair : programasAcademicos) {
-
         ProgramaAcademico* programa = pair.second;
-        string nombrePrograma = programa->getDato("programaacademico");
-        string nivel = programa->getDato("nivelformacion");
 
-        if (nombrePrograma.find(palabraClave) != string::npos &&   nivel == nivelFormacion) {
+        if (programa->contienePalabraClave(palabraClave) && programa->tieneNivelDeFormacion(nivelFormacion)) {
             resultados.push_back(programa);
         }
     }
 
     for (ProgramaAcademico* programa : resultados) {
-        cout << "Código SNIES: " << programa->getDato("codigosnies") << endl;
-        cout << "Nombre del Programa: " << programa->getDato("programaacademico") << endl;
-        cout << "Código de la Institución: " << programa->getDato("codigoinstitucion") << endl;
-        cout << "Nombre de la Institución: " << programa->getDato("nombreinstitucion") << endl;
-        cout << "Metodología: " << programa->getDato("metodologia") << endl;
-        cout << "----------------------------------------" << endl;
+        programa->mostrarInformacionPrincipalPrograma();
     }
 
     if (exportarCSV) {
