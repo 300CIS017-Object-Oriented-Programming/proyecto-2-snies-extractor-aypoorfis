@@ -36,6 +36,11 @@ public:
 
     void consolidarMatriculadosPorAno() const;
 
+    void mostrarProgramasSinMatriculasNuevas(const map<string, ProgramaAcademico*>& programas);
+
+    vector<string> obtenerProgramasSinMatriculasNuevas(const map<string, ProgramaAcademico*>& programas);
+
+
     // Métodos auxiliares
     void exportarDatos(const string &formato);
 };
