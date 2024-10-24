@@ -24,11 +24,11 @@ public:
     // Este metodo se encarga de devolver el valor del atributo idsexo, que es el único que no es un número
     string getGenero() const;
     int getDatoNumerico(string const &dato) const;
+    void setDato(string const &, string const &);
 
-    // Este metodo se encarga de inicializar los atributos
-    // (Inscritos, Admitidos, Matriculados, MatriculadosPrimerSemestre, Graduados)
-    // de la clase con los valores que se encuentran en el vector de parametrosConsolidado
-    void setDato(string dato, string valor);
+    string toTxt() const;
+    string toJson() const;
+    string toCsv() const;
 };
 
 #endif // CONSOLIDADO_H

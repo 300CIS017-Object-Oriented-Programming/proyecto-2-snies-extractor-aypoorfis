@@ -1,18 +1,23 @@
 #include "Settings.h"
 
-// Define static member variables
-string Settings::ADMITIDOS_FILE_PATH;
-string Settings::MATRICULADOS_FILE_PATH;
-string Settings::INSCRITOS_FILE_PATH;
-string Settings::PROGRAMAS_FILTRAR_FILE_PATH;
-string Settings::GRADUADOS_FILE_PATH;
-string Settings::BASE_PATH;
-string Settings::EXTENSION_ARCHIVOS;
-char Settings::DELIMITADOR;
-int Settings::ANIO_INICIAL;
-int Settings::ANIO_FINAL;
+using std::string;
 
-void Settings::setBasePath(const string &newPath) {
+// Inicialización de las variables estáticas
+string Settings::BASE_PATH = "C:/SNIES_EXTRACTOR/inputs/";
+string Settings::PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "programas.csv";
+string Settings::ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
+string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados";
+string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "inscritos";
+string Settings::GRADUADOS_FILE_PATH = BASE_PATH + "graduados";
+string Settings::OUTPUT_FILE_PATH = "C:/SNIES_EXTRACTOR/outputs/output.csv";
+string Settings::EXTENSION_ARCHIVOS = ".csv";
+char Settings::DELIMITADOR = ';';
+int Settings::ANIO_INICIAL = 2010;
+int Settings::ANIO_FINAL = 2020;
+
+
+// Implementación de los métodos setters
+void Settings::setBasePath(const string& newPath) {
     BASE_PATH = newPath;
 }
 

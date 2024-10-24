@@ -4,12 +4,13 @@
 #include <iostream>
 #include <string>
 #include <map>
-
+#include <sstream>
 
 using std::string;
 using std::cout;
 using std::endl;
 using std::to_string;
+using std::ostringstream;
 
 ProgramaAcademico::~ProgramaAcademico() {
     for (auto const &[key, value] : consolidados) {
@@ -84,8 +85,7 @@ bool ProgramaAcademico::contienePalabraClave(string const &palabraClave) const {
 
 bool ProgramaAcademico::tieneNivelDeFormacion(string const &nivelFormacion) const {
     string const LLAVENIVELFORMACION = "niveldeformacion";
-    auto it = datos.find(LLAVENIVELFORMACION);
-    if (it != datos.end()) {
+    if (const auto it = datos.find(LLAVENIVELFORMACION); it != datos.end()) {
         return it->second == nivelFormacion;
     }
     throw std::invalid_argument("El atributo 'niveldeformacion' no está en el mapa de datos del programa académico.");
@@ -179,3 +179,62 @@ void ProgramaAcademico::mostrarInformacionPrincipalPrograma() {
     cout << "Nombre de la institución: " << this->getDato(LLAVENOMBREINSTITUCION) << endl;
     cout << "Metodología de formación: " << this->getDato(LLAVEMETODOLOGIAFORMACION) << endl;
 }
+
+string ProgramaAcademico::toTxt() const {
+    ostringstream ossTxt;
+    // Exportar los datos del programa académico
+    for (const auto &[key, value] : datos) {
+        ossTxt << key << ": " << value << "\n";
+    }
+
+    // Exportar los consolidados
+    ossTxt << "\nConsolidados:\n";
+    for (const auto &[key, consolidado] : consolidados) {
+        ossTxt << "Consolidado " << key << ":\n";
+        ossTxt << consolidado->toTxt();  // Llamar a toTxt() de cada Consolidado
+        ossTxt << "\n";  // Añadir una nueva línea entre consolidados para mejor legibilidad
+    }
+    return ossTxt.str();
+}
+
+string ProgramaAcademico::toJson() const {
+    ostringstream ossJson;
+    ossJson << "{\n";
+
+    // Exportar los datos del programa académico
+    ossJson << "  \"datos\": {\n";
+    for (auto it = datos.begin(); it != datos.end(); ++it) {
+        ossJson << "    \"" << it->first << "\": \"" << it->second << "\"";
+        ossJson << (std::next(it) != datos.end() ? ",\n" : "\n");
+    }
+    ossJson << "  },\n";
+
+    // Exportar los consolidados
+    ossJson << "  \"consolidados\": {\n";
+    for (auto it = consolidados.begin(); it != consolidados.end(); ++it) {
+        ossJson << "    \"" << it->first << "\": " << it->second->toJson();
+        ossJson << (std::next(it) != consolidados.end() ? ",\n" : "\n");
+    }
+    ossJson << "  }\n";
+    ossJson << "}";
+
+    return ossJson.str();
+}
+
+string ProgramaAcademico::toCsv() const {
+    ostringstream ossCsv;
+    // Exportar los datos del programa académico como primeras columnas
+    bool isFirst = true;
+    const char delimitador = Settings::DELIMITADOR;
+    for (const auto& [key, value] : datos) {
+        ossCsv << (isFirst ? "" : delimitador) << "\"" << value << "\"";
+        isFirst = false;
+    }
+    // Exportar los consolidados como columnas adicionales, incluyendo la key
+    for (const auto& [key, consolidado] : consolidados) {
+        ossCsv << delimitador + "\"" << key << "\"" + delimitador << consolidado->toCsv();  // Incluir la key y llamar a toCsv() de cada Consolidado
+    }
+    return ossCsv.str();
+}
+
+
