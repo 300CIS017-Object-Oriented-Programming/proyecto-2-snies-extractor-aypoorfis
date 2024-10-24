@@ -72,113 +72,29 @@ Se implemento una nueva clase que permite exportar documentos de tipo .Txt.
 classDiagram
 direction BT
     class ProgramaAcademico {
-        -int codigoDeLaInstitucion
-        -int iesPadre
-        -string institucionDeEducacionSuperiorIes
-        -string principalOSeccional
-        -int idSectorIes
-        -string sectorIes
-        -int idCaracter
-        -string caracterIes
-        -int codigoDelDepartamentoIes
-        -string departamentoDeDomicilioDeLaIes
-        -int codigoDelMunicipioIes
-        -string municipioDeDomicilioDeLaIes
-        -int codigoSniesDelPrograma
-        -string programaAcademico
-        -int idNivelAcademico
-        -string nivelAcademico
-        -int idNivelDeFormacion
-        -string nivelDeFormacion
-        -int idMetodologia
-        -string metodologia
-        -int idArea
-        -string areaDeConocimiento
-        -int idNucleo
-        -string nucleoBasicoDelConocimientoNbc
-        -int idCineCampoAmplio
-        -string descCineCampoAmplio
-        -int idCineCampoEspecifico
-        -string descCineCampoEspecifico
-        -int idCineCodigoDetallado
-        -string descCineCodigoDetallado
-        -int codigoDelDepartamentoPrograma
-        -string departamentoDeOfertaDelPrograma
-        -int codigoDelMunicipioPrograma
-        -string municipioDeOfertaDelPrograma
-        -Vector<Consolidado*> consolidados
-        +ProgramaAcademico()
-        +~ProgramaAcademico()
-        +setCodigoDeLaInstitucion(int)
-        +setIesPadre(int)
-        +setInstitucionDeEducacionSuperiorIes(string)
-        +setPrincipalOSeccional(string)
-        +setIdSectorIes(int)
-        +setSectorIes(string)
-        +setIdCaracter(int)
-        +setCaracterIes(string)
-        +setCodigoDelDepartamentoIes(int)
-        +setDepartamentoDeDomicilioDeLaIes(string)
-        +setCodigoDelMunicipioIes(int)
-        +setMunicipioDeDomicilioDeLaIes(string)
-        +setCodigoSniesDelPrograma(int)
-        +setProgramaAcademico(string)
-        +setIdNivelAcademico(int)
-        +setNivelAcademico(string)
-        +setIdNivelDeFormacion(int)
-        +setNivelDeFormacion(string)
-        +setIdMetodologia(int)
-        +setMetodologia(string)
-        +setIdArea(int)
-        +setAreaDeConocimiento(string)
-        +setIdNucleo(int)
-        +setNucleoBasicoDelConocimientoNbc(string)
-        +setIdCineCampoAmplio(int)
-        +setDescCineCampoAmplio(string)
-        +setIdCineCampoEspecifico(int)
-        +setDescCineCampoEspecifico(string)
-        +setIdCineCodigoDetallado(int)
-        +setDescCineCodigoDetallado(string)
-        +setCodigoDelDepartamentoPrograma(int)
-        +setDepartamentoDeOfertaDelPrograma(string)
-        +setCodigoDelMunicipioPrograma(int)
-        +setMunicipioDeOfertaDelPrograma(string)
-        +getCodigoDeLaInstitucion()
-        +getIesPadre()
-        +getInstitucionDeEducacionSuperiorIes()
-        +getPrincipalOSeccional()
-        +getIdSectorIes()
-        +getSectorIes()
-        +getIdCaracter()
-        +getCaracterIes()
-        +getCodigoDelDepartamentoIes()
-        +getDepartamentoDeDomicilioDeLaIes()
-        +getCodigoDelMunicipioIes()
-        +getMunicipioDeDomicilioDeLaIes()
-        +getCodigoSniesDelPrograma()
-        +getProgramaAcademico()
-        +getIdNivelAcademico()
-        +getNivelAcademico()
-        +getIdNivelDeFormacion()
-        +getNivelDeFormacion()
-        +getIdMetodologia()
-        +getMetodologia()
-        +getIdArea()
-        +getAreaDeConocimiento()
-        +getIdNucleo()
-        +getNucleoBasicoDelConocimientoNbc()
-        +getIdCineCampoAmplio()
-        +getDescCineCampoAmplio()
-        +getIdCineCampoEspecifico()
-        +getDescCineCampoEspecifico()
-        +getIdCineCodigoDetallado()
-        +getDescCineCodigoDetallado()
-        +getCodigoDelDepartamentoPrograma()
-        +getDepartamentoDeOfertaDelPrograma()
-        +getCodigoDelMunicipioPrograma()
-        +getMunicipioDeOfertaDelPrograma()
-        +pushConsolidado(Consolidado*)
-        +getConsolidado()
+       -map<string, string> datos
+       -map<string, Consolidado *> consolidados
+       -int getMatriculadosNuevosPorSemestre(int) const
+       -int getMatriculadosNuevosPorAnio(int) const
+       -int getMatriculadosPorSemestre(int) const
+       +int getMatriculadosPorAnio(int) const
+       +ProgramaAcademico() = default
+       +~ProgramaAcademico()
+       +void setDato(string const &, string)
+       +string getDato(string const &)
+       +bool sinMatriculasNuevas() const
+       +bool contienePalabraClave(string const &) const
+       +bool tieneNivelDeFormacion(string const &) const
+       +void addConsolidado(string const &, Consolidado *)
+       +void modificarConsolidado(string const &, string const &, string const &)
+       +void mostrarMatriculadosConsolidado()
+       +void mostrarDiferenciaPorcentualNuevosMatriculados() const
+       +void mostrarIdentificadoresPrograma()
+       +void mostrarInformacionPrincipalPrograma()
+       +string toTxt() const
+       +string toJson() const
+       +string toCsv() const
+       -void calcularDiferenciaPorcentualNuevosMatriculados() const;
     }
     class Consolidado {
         -int inscritos
@@ -208,6 +124,10 @@ direction BT
         +getMatriculadosPrimerSemestre()
         +getMatriculados()
         +getGraduados()
+        -map<string, string>datosConsolidado
+        +string toTxt() const
+        +string toJson() const
+        +string toCsv() const
     }
     
     
@@ -236,41 +156,64 @@ direction BT
     # void exportarDatos(const string & filePath) override
      }
     class SNIESController {
-        -map <int, ProgramaAcademico*> programasAcademicos
-        -GestorCsv gestorCsvObj
-        -vector<string> etiquetasColumnas
-        -string rutaProgramasCsv
-        -string rutaAdmitidos
-        -string rutaGraduados
-        -string rutaInscritos
-        -string rutaMatriculados
-        -string rutaMatriculadosPrimerSemestre
-        -string rutaOutput
-        +SNIESController("incializar con strings de rutas")
-        +~SNIESController()
-        +void procesarDatosCsv(string &ano1, string &ano2)
-        +void calcularDatosExtra(bool)
-        +void buscarProgramas(bool, string &, int)
+       -map< string, ProgramaAcademico *> &programasAcademicos
+       -GestorCsv gestorCsvObj
+       -GestorTxt gestorTxtObj
+       -GestorJson gestorJsonObj
+       +SNIESController() = default
+       +~SNIESController()
+       +void procesarDatosCsv() const
+       +void filtrarProgramas()
+       +void calcularDiferenciaPorcentualNuevosMatriculados()
+       +void consolidarMatriculadosPorAno() const
+       +void exportarDatos()
+
+       
+          
     }
     class Settings {
-        +static const string ADMITIDOS_FILE_PATH
-        +static const string MATRICULADOS_FILE_PATH
-        +static const string INSCRITOS_FILE_PATH
-        +static const string PROGRAMAS_FILTRAR_FILE_PATH
-        +static const string BASE_PATH
-        +static const string DELIMITADOR
+          +static  string ADMITIDOS_FILE_PATH
+          +static  string MATRICULADOS_FILE_PATH
+          +static  string INSCRITOS_FILE_PATH
+          +static  string PROGRAMAS_FILTRAR_FILE_PATH
+          +static  string GRADUADOS_FILE_PATH
+          +static string OUTPUT_FILE_PATH
+          +static  string BASE_PATH
+          +static string EXTENSION_ARCHIVOS
+          +static char DELIMITADOR
+          +static int ANIO_INICIAL
+          +static int ANIO_FINAL
+          +static void setBasePath(const string& newPath);
+          +static void setDelimitador(const char& newDelimitador);
+          +static void setAnioInicial(const string& newAnioInicial);
+          +static void setAnioFinal(const string& newAnioFinal);
+          +static void setAnioAdmitidos(const string& newAnioRuta);
+          +static void setAnioMatriculados(const string& newAnioRuta);
+          +static void setAnioInscritos(const string& newAnioRuta);
+          +static void setAnioGraduados(const string& newAnioRuta);
+          +static string getAdmitidosFilePath();
+          +static string getMatriculadosFilePath();
+          +static string getInscritosFilePath();
+          +static string getProgramasFiltrarFilePath();
+          +static string getGraduadosFilePath();
 
     }
 
     class View {
         SNIESController controlador
+        - bool isConvetibleToInt()
+        - bool mostrarPantallaBienvenido()
+        - void mostrarDatosExtra()
+        - void buscarPorPalabraClaveYFormacion()
+        - void mostrarEstudiantesMatriculadosXAno()
+        - void exportarDiferenciaPorcentualAnualNuevosEstudiantes()
+        - void exportarDatos()
+        - void salir()
         +View()
         +~View()
-        +bool pantallaBienvenido()
-        +void visualizacionDatosExtra()
-        +void buscarPorPalabraClaveYFormacion()
-        +void salir()
-        +bool isConvetibleToInt()
+        + void runMenu()
+        
+        
     }
     class Main {
         + int main()
