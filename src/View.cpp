@@ -1,4 +1,5 @@
 #include "View.h"
+#include "SNIESController.h"
 
 // Mantenimiento: Implementar la lectura de las rutas de los archivos CSV desde un
 // archivo de configuración
@@ -22,6 +23,55 @@ View::View()
 View::~View()
 {
     controlador.~SNIESController();
+}
+
+void View::runMenu() {
+    bool archivosParametrizados = mostrarPantallaBienvenido();
+
+    if (archivosParametrizados) {
+        int opcion;
+        bool continuar = true;
+
+        while (continuar) {
+            std::cout << "\n----- Menú Principal -----" << std::endl;
+            std::cout << "1. Mostrar Datos Extra" << std::endl;
+            std::cout << "2. Buscar por Palabra Clave y Formación" << std::endl;
+            std::cout << "3. Mostrar estudiantes matriculados por año" << std::endl;
+            std::cout << "4. Exportar datos " << std::endl;
+            std::cout << "5. Exportar diferencia porcentual anual de nuevos estudiantes" << std::endl;
+            std::cout << "6. Mostrar diferencia porcentual nuevos matriculado" << std::endl;
+            std::cout << "7. Salir" << std::endl;
+            std::cout << "Seleccione una opción: ";
+            std::cin >> opcion;
+
+            switch (opcion) {
+            case 1:
+                mostrarDatosExtra();
+                break;
+            case 2:
+                buscarPorPalabraClaveYFormacion();
+                break;
+            case 3:
+                mostrarEstudiantesMatriculadosXAno();
+                break;
+            case 4:
+                exportarDatos();
+                break;
+            case 5:
+                exportarDiferenciaPorcentualAnualNuevosEstudiantes();
+                break;
+            case 6:
+                mostrarCalculoDiferenciaPorcentualNuevosMatriculado();
+                break;
+            case 7:
+                continuar = false;
+                break;
+            default:
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+            }
+        }
+    }
+    salir();
 }
 
 
@@ -222,3 +272,100 @@ bool View::isConvetibleToInt(const string &str)
         return false;
     }
 }
+
+void View::mostrarEstudiantesMatriculadosXAno() {
+    std::cout << "Mostrando los estudiantes matriculados por año..." << std::endl;
+
+    // Llamar al método del controlador para consolidar y mostrar los datos
+    controlador.consolidarMatriculadosPorAno();
+}
+
+
+void View::exportarDiferenciaPorcentualAnualNuevosEstudiantes() {
+    std::cout << "Mostrando la diferencia porcentual anual de nuevos estudiantes..." << std::endl;
+
+    // Obtener los datos del controlador
+    std::vector<std::tuple<int, int, int>> datos = controlador.exportarDiferenciaPorcentualNuevosMatriculados();
+
+    // Mostrar los datos en la consola
+    std::cout << "Año Anterior | Año Actual | Diferencia Porcentual\n";
+    for (const auto& [anioAnterior, anioActual, porcentaje] : datos) {
+        std::cout << anioAnterior << " | " << anioActual << " | " << porcentaje << "%\n";
+    }
+
+    // Preguntar si se desea exportar los datos a un archivo CSV
+    char opcion;
+    std::cout << "\n¿Desea exportar los datos a un archivo CSV? (s/n): ";
+    std::cin >> opcion;
+
+    if (opcion == 's' || opcion == 'S') {
+        std::string rutaArchivo;
+        std::cout << "Ingrese la ruta del archivo (incluyendo nombre y extensión .csv): ";
+        std::cin >> rutaArchivo;
+
+        try {
+            // Exportar los datos usando la función de exportación
+            exportarDiferenciaPorcentualNuevosMatriculados(datos, rutaArchivo);
+        } catch (const std::ios_base::failure& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+}
+
+
+void View::exportarDatos() {
+    std::cout << "Seleccione el formato para exportar los datos:" << std::endl;
+    std::cout << "1. CSV" << std::endl;
+    std::cout << "2. TXT" << std::endl;
+    std::cout << "3. JSON" << std::endl;
+    std::cout << "Ingrese su opción (1-3): ";
+
+    int opcion;
+    std::cin >> opcion;
+
+    std::string formato;
+    switch (opcion) {
+    case 1:
+        formato = "CSV";
+        break;
+    case 2:
+        formato = "TXT";
+        break;
+    case 3:
+        formato = "JSON";
+        break;
+    default:
+        std::cout << "Opción inválida. Por favor, seleccione un formato válido." << std::endl;
+        return;
+    }
+
+    // Llamar al método del controlador para exportar los datos
+    controlador.exportarDatos(formato);
+    std::cout << "Datos exportados exitosamente en formato " << formato << "." << std::endl;
+}
+
+
+
+void View::mostrarCalculoDiferenciaPorcentualNuevosMatriculado() {
+    std::cout << "Seleccione el programa académico para mostrar la diferencia porcentual de nuevos matriculados:\n";
+
+    for (const auto& pair : controlador.getProgramasAcademicos()) {
+        std::cout << pair.first << ": " << pair.second->getDato("programaacademico") << std::endl;
+    }
+
+    std::cout << "Ingrese el nombre del programa académico: ";
+    std::string nombrePrograma;
+    std::cin >> nombrePrograma;
+
+    // Obtener el programa académico seleccionado
+    ProgramaAcademico* programa = controlador.obtenerProgramaPorNombre(nombrePrograma);
+    if (programa) {
+        // Mostrar la diferencia porcentual de nuevos matriculados
+        programa->mostrarDiferenciaPorcentualNuevosMatriculados();
+    } else {
+        std::cout << "Programa académico no encontrado." << std::endl;
+    }
+}
+
+
+

@@ -13,12 +13,16 @@ private:
     bool mostrarPantallaBienvenido();
     void mostrarDatosExtra();
     void buscarPorPalabraClaveYFormacion();
+    void mostrarEstudiantesMatriculadosXAno(); //REVISAR Danilo
+    void exportarDiferenciaPorcentualAnualNuevosEstudiantes(); //revisar danilo
+    void exportarDatos(); // REVISAR danilo
+    void mostrarCalculoDiferenciaPorcentualNuevosMatriculado();
     void salir();
 public:
     View();
     ~View();
     // Estructura: El View debería tener solo una función pública.
-    void mostrarMenu();
+    void runMenu();
 };
 
 #endif
