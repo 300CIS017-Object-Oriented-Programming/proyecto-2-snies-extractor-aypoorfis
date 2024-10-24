@@ -28,6 +28,7 @@ View::~View()
 void View::runMenu() {
     bool archivosParametrizados = mostrarPantallaBienvenido();
 
+    
     if (archivosParametrizados) {
         int opcion;
         bool continuar = true;
