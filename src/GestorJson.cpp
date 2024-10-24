@@ -5,7 +5,7 @@
 
 using std::ofstream;
 
-void GestorJson::exportarDatos(map<string, ProgramaAcademico*> &datos) {
+void GestorJson::exportarDatos(map<string, ProgramaAcademico *> &datos) {
     const string nombreArchivoOutput = Settings::OUTPUT_FILE_PATH;
     // Crear el archivo de salida
     std::ofstream archivoSalida(nombreArchivoOutput);

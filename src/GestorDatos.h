@@ -20,7 +20,7 @@ public:
     // Destructor
     virtual ~GestorDatos() = default;
     // Metodo para escribir datos procesados en un archivo
-    virtual void exportarDatos(map<string, ProgramaAcademico*> &) = 0;
+    virtual void exportarDatos(map<string, ProgramaAcademico *> &) = 0;
 };
 
 #endif // GESTOR_DATOS_H

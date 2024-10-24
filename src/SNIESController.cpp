@@ -1,19 +1,29 @@
 #include "SNIESController.h"
-#include <iostream>
-#include <fstream>
-#include <string>
 #include "Settings.h"
+#include "GestorDatos.h"
+#include "GestorCsv.h"
+#include "GestorTxt.h"
+#include "GestorJson.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+
+
 using std::cout;
 using std::endl;
 using std::ifstream;
-
-using namespace std;
 
 SNIESController::~SNIESController() {
     for (auto& pair : programasAcademicos) {
         delete pair.second;
     }
 }
+
+void SNIESController::setGestorDatos(GestorDatos* gestor) {
+    gestorDatosObj = gestor;
+}
+
+SNIESController::SNIESController(GestorDatos* gestor) : programasAcademicos(), gestorDatosObj(gestor) {}
 
 void SNIESController::procesarDatosCsv() const {
     // Inicializar programas de análisis desde el archivo CSV
@@ -23,43 +33,49 @@ void SNIESController::procesarDatosCsv() const {
     GestorCsv::adjuntarTodosLosDatos(programasAcademicos);
 }
 
-void SNIESController::filtrarProgramas(const string& palabraClave, const string& nivelFormacion, bool exportarCSV) {
-    vector<ProgramaAcademico*> resultados;
+void SNIESController::filtrarProgramas(const string& palabraClave, const string& nivelFormacion, bool exportarCSV) const {
+    vector<ProgramaAcademico*> programasFiltrados;
+    string const LLAVE_CODIGO_SNIES = "codigosnies";
 
-    for (auto& pair : programasAcademicos) {
-        ProgramaAcademico* programa = pair.second;
+    GestorDatos* gestorCsvObj = new GestorCsv();
+    setGestorDatos(gestorCsvObj);
 
+    for (const auto& [key, programa] : programasAcademicos) {
         if (programa->contienePalabraClave(palabraClave) && programa->tieneNivelDeFormacion(nivelFormacion)) {
-            resultados.push_back(programa);
+            programasFiltrados.push_back(programa);
         }
     }
 
-    for (ProgramaAcademico* programa : resultados) {
+    for (const auto& programa : programasFiltrados) {
         programa->mostrarInformacionPrincipalPrograma();
     }
 
     if (exportarCSV) {
-        map<string, ProgramaAcademico*> resultadosMap;
-        for (ProgramaAcademico* programa : resultados) {
-            resultadosMap[programa->getDato("codigosnies")] = programa;
+        map<string, ProgramaAcademico*> programasFiltradosMap;
+        for (const auto& programa : programasFiltrados) {
+            programasFiltradosMap[programa->getDato("codigosnies")] = programa;
         }
-        gestorCsvObj.exportarDatos(resultadosMap);
+        gestorDatosObj->exportarDatos(programasFiltradosMap);
     }
 }
-void SNIESController::consolidarMatriculadosPorAno() const {
+
+void SNIESController::consolidarMatriculadosPorAno(bool exportarCsv) const {
+    string const LLAVE_METODOLOGIA = "metodoformacion";
+    int anioInicial = Settings::ANIO_INICIAL;
+    int anioFinal = Settings::ANIO_FINAL;
+
     map<int, int> matriculadosVirtual;
     map<int, int> matriculadosPresencial;
 
     if (programasAcademicos.empty()) {
-        cout << "Error: programasAcademicos is not initialized." << endl;
-        return;
+        throw std::domain_error("Error: 'programasAcademicos' is not initialized or contains no data.");
     }
 
-    for (const auto& pair : this->programasAcademicos) {
-        ProgramaAcademico* programa = pair.second;
-        string metodologia = programa->getDato("metodoformacion");
+    for (const auto &[key, value] : this->programasAcademicos) {
+        ProgramaAcademico* programa = value;
+        string metodologia = programa->getDato(LLAVE_METODOLOGIA);
 
-        for (int anio = Settings::ANIO_INICIAL; anio <= Settings::ANIO_FINAL; ++anio) {
+        for (int anio = anioInicial; anio <= anioFinal; ++anio) {
             int matriculados = programa->getMatriculadosPorAnio(anio);
 
             if (metodologia == "Virtual") {
@@ -70,26 +86,24 @@ void SNIESController::consolidarMatriculadosPorAno() const {
         }
     }
 
-    for (const auto& entry : matriculadosVirtual) {
-        cout << "Año " << entry.first << ": " << entry.second << " matriculados" << endl;
+    for (const auto& [anio, matriculados] : matriculadosVirtual) {
+        cout << "Año " << anio << ": " << matriculados << " matriculados" << endl;
     }
 
-    for (const auto& entry : matriculadosPresencial) {
-        cout << "Año " << entry.first << ": " << entry.second << " matriculados" << endl;
+    for (const auto& [anio, matriculados] : matriculadosPresencial) {
+        cout << "Año " << anio << ": " << matriculados << " matriculados" << endl;
     }
 }
 
-void SNIESController::exportarDatos(const string& formato) {
+void SNIESController::exportarDatos(const string& formato) const {
     if (formato == "CSV") {
-        gestorCsvObj.exportarDatos(programasAcademicos);
+        gestorDatosObj->exportarDatos(programasAcademicos);
     } else if (formato == "TXT") {
-        gestorTxtObj.exportarDatos(programasAcademicos);
+        gestorDatosObj->exportarDatos(programasAcademicos);
     } else if (formato == "JSON") {
-        gestorJsonObj.exportarDatos(programasAcademicos);
+        gestorDatosObj->exportarDatos(programasAcademicos);
     }
 }
-
-#include <fstream>
 
 // Función auxiliar para exportar datos a un archivo CSV
 void exportarDiferenciaPorcentualNuevosMatriculados(const std::vector<std::tuple<int, int, int>>& datos, const std::string& rutaArchivo) {

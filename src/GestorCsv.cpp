@@ -4,8 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <cctype>
 #include <algorithm>
+
 using std::vector;
 using std::string;
 using std::ifstream;
@@ -97,7 +97,7 @@ void GestorCsv::inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*
         }
         else {
             // Crear un ProgramaAcademico vacío
-            ProgramaAcademico* programa = new ProgramaAcademico();
+            auto programa = new ProgramaAcademico();
 
             // Agregar el programa al mapa usando el código SNIES como llave
             string codigoSnies = datosFila[0];
@@ -110,7 +110,7 @@ void GestorCsv::inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*
         }
 
         // Crear un ProgramaAcademico vacío
-        ProgramaAcademico* programa = new ProgramaAcademico();
+        auto programa = new ProgramaAcademico();
 
         // Agregar el programa al mapa usando el código SNIES como llave
         string codigoSnies = datosFila[0];
@@ -126,156 +126,94 @@ void GestorCsv::inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*
 }
 
 void adjuntarDatosProgramaAcademico(vector<string> &llaves, vector<string> &valores, ProgramaAcademico &programa) {
+    vector<string> llavesEspeciales = { "inscritos", "admitidos", "matriculados", "matriculadosprimersemestre", "graduados" };
+    Consolidado consolidado;
 
-    vector<string> llavesEspeciales = { "inscritos", "admitidos", "matriculados",
-                                        "matriculadosPrimerSemestre", "graduados" };
-    
-    // Un Consolidado para almacenar los datos especiales
-    Consolidado* consolidado = new Consolidado();
+    for (size_t i = 0; i < llaves.size(); ++i) {
+        const string &llave = llaves[i];
+        const string &valor = valores[i];
 
-    // Es suficiente con recorrer las llavees ya que los dos vectoes tiene el mismo tamaño
-    for (int i = 0; i < llaves.size(); ++i) {
-        string &llave = llaves[i];
-        string &valor = valores[i];
-
-        // Verificar si la llave es especial
-        if (find(llavesEspeciales.begin(), llavesEspeciales.end(), llave) != llavesEspeciales.end()) {
-            // Agregar al Consolidado
-            map<string, string> parametros;
-            parametros[llave] = valor;
-
-            consolidado->setParametros(parametros);
-
+        if (std::find(llavesEspeciales.begin(), llavesEspeciales.end(), llave) != llavesEspeciales.end()) {
+            consolidado.setDato(llave, valor);
         } else {
-            // Agregar el dato directamente al ProgramaAcademico
             programa.setDato(llave, valor);
         }
     }
-
-    // Agregar el Consolidado al programa (asumiendo semestre 0 para este ejemplo)
-    programa.addConsolidado(0, consolidado);
+    programa.addConsolidado(nullptr, &consolidado);
 }
 
-void GestorCsv::adjuntarDatosArchivo(string &ruta, map<string, ProgramaAcademico*> &programas) {
+void GestorCsv::adjuntarDatosArchivo(const string &ruta, map<string, ProgramaAcademico*> &programas) {
+    string linea;
+    string LLAVE_CODIGO_SNIES = "codigosnies";
+    vector<string> nombresColumnas;
+    bool primeraLinea = true;
 
     ifstream archivo(ruta);
     if (!archivo.is_open()) {
-        cout << "Archivo " << ruta << " no se pudo abrir correctamente" << endl;
-        return;
+        throw std::ios_base::failure("Archivo " + ruta + " no se pudo abrir correctamente");
     }
-    string linea;
-    vector<string> nombresColumnas;
-    bool primeraLinea = true;
+
+    auto it = programas.end();
 
     while (getline(archivo, linea)) {
         vector<string> datosFila = dividirLineaCSV(linea);
 
         if (primeraLinea) {
             nombresColumnas = datosFila;
+            vector<string> llavesDatos = convertirVectorFormaEstandar(nombresColumnas);
+            it = programas.end(); // Declarar it aquí;
             primeraLinea = false;
             continue;
         }
 
         vector<string> datosEstandarizados = convertirVectorFormaEstandar(datosFila);
-        string nombreProgramaEstandarizado = convertirStringFormaEstandar(datosEstandarizados[0]);
-
-        // se encuentra el programa académico en el mapa
-        auto it = programas.find(nombreProgramaEstandarizado);
 
         if (it != programas.end()) {
             adjuntarDatosProgramaAcademico(nombresColumnas, datosEstandarizados, *(it->second));
         } else {
-            throw runtime_error("Programa académico no encontrado en el mapa: " + nombreProgramaEstandarizado);
+            string msjError = "No se encontró el programa académico con código SNIES: " + it->first;
+            throw std::out_of_range(msjError);
         }
     }
 
     archivo.close();
 }
-void GestorCsv::exportarDatos(map<string, ProgramaAcademico*> datos) {
-    ofstream file("output.csv");
-    if (!file.is_open()) {
-        throw ios_base::failure("No se pudo abrir el archivo CSV para exportar: output.csv");
+
+void GestorCsv::exportarDatos(map<string, ProgramaAcademico*> &datos) {
+    const string nombreArchivoOutput = Settings::OUTPUT_FILE_PATH;
+    const char delimitador = Settings::DELIMITADOR;
+    vector<string> etiquetasColumnas = Settings::ETIQUETAS_COLUMNAS;
+    vector<string> llavesDatos = Settings::LLAVES_DATOS;
+    std::ofstream archivoSalida(nombreArchivoOutput);
+
+    if (!archivoSalida.is_open()) {
+        throw std::ios_base::failure("No se pudo abrir el archivo CSV para exportar: " + nombreArchivoOutput);
     }
 
-    file << "Código SNIES,Nombre del Programa,Código de la Institución,Nombre de la Institución,Metodología\n";
-    for (auto& pair : datos) {
-        ProgramaAcademico* programa = pair.second;
-        file << programa->getDato("codigosnies") << ","
-             << programa->getDato("programaacademico") << ","
-             << programa->getDato("codigoinstitucion") << ","
-             << programa->getDato("nombreinstitucion") << ","
-             << programa->getDato("metodologia") << "\n";
+    // Imprimir las etiquetas de las columnas
+    for (int i = 0; i < etiquetasColumnas.size(); ++i) {
+        archivoSalida << etiquetasColumnas[i];
+        if (i < etiquetasColumnas.size() - 1) {
+            archivoSalida << delimitador;
+        }
     }
+    archivoSalida << "\n";
 
-    file.close();
-    cout << "Exportación a CSV exitosa: output.csv" << endl;
+    // Imprimir los datos de cada ProgramaAcadémico
+    for (auto const &[key, value] : datos) {
+        ProgramaAcademico* programa = value;
+        for (int i = 0; i < llavesDatos.size(); ++i) {
+            archivoSalida << programa->getDato(llavesDatos[i]);
+            if (i < llavesDatos.size() - 1) {
+                archivoSalida << delimitador;
+            }
+        }
+        archivoSalida << "\n";
+    }
+    archivoSalida.close();
+
+    std::cout << "Exportación a CSV exitosa: " << nombreArchivoOutput << "\n";
 }
-/*
-void GestorCsv::adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &datos) {
-    // File paths from Settings
-    vector<string> filePaths = {
-        Settings::ADMITIDOS_FILE_PATH,
-        Settings::MATRICULADOS_FILE_PATH,
-        Settings::INSCRITOS_FILE_PATH,
-        Settings::GRADUADOS_FILE_PATH
-    };
-
-    for (const string &filePath : filePaths) {
-        ifstream file(filePath);
-        if (!file.is_open()) {
-            cout << "Archivo " << filePath << " no se pudo abrir correctamente" << endl;
-            continue;
-        }
-
-        string line;
-        vector<string> columnNames;
-        char delimiter = Settings::DELIMITADOR[0];
-
-        // Read the first line to get column names
-        if (getline(file, line)) {
-            stringstream lineStream(line);
-            string column;
-
-            while (getline(lineStream, column, delimiter)) {
-                columnNames.push_back(column);
-            }
-            // Convert column names to their standard form
-            columnNames = convertirVectorFormaEstandar(columnNames);
-        }
-
-        // Read the rest of the file
-        while (getline(file, line)) {
-            stringstream lineStream(line);
-            vector<string> rowData;
-            string data;
-
-            while (getline(lineStream, data, delimiter)) {
-                rowData.push_back(data);
-            }
-
-            if (rowData.size() != columnNames.size()) {
-                cout << "Error: La cantidad de datos no coincide con la cantidad de columnas" << endl;
-                continue;
-            }
-
-            // Se toma la primera posición, ya que es la key (codigoSnies)
-            string key = rowData[0];
-            if (datos.find(key) == datos.end()) {
-                // Si la key no se encuentra, se crea un new ProgramaAcademico
-                datos[key] = new ProgramaAcademico();
-            }
-
-            // se llena el ProgramaAcademico con los datos
-            ProgramaAcademico* program = datos[key];
-            for (size_t i = 0; i < columnNames.size(); ++i) {
-                program->setDato(columnNames[i], rowData[i]);
-            }
-        }
-
-        file.close();
-    }
-}
-*/
 
 
 

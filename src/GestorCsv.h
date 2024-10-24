@@ -30,7 +30,7 @@ private:
     static void adjuntarDatosProgramaAcademico(vector<string> &, vector<string> &, ProgramaAcademico &);
     // Esta función adjunta los datos de un archivo CSV a un map<string, ProgramaAcademico*>,
     // es decir, adjunta la información de todas las ocurrencias de los programas de análisis.
-    static void adjuntarDatosArchivo(string &ruta, map<string, ProgramaAcademico*> &);
+    static void adjuntarDatosArchivo(string const &, map<string, ProgramaAcademico*> &);
 public:
     GestorCsv() = default;
     ~GestorCsv() = default;
@@ -40,7 +40,7 @@ public:
     // Esta función adjunta todos los datos de los programas de análisis de todos los archivos CSV a un mapa.
     static void adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &);
     // Esta función exporta los datos de los programas de análisis a un archivo CSV.
-    void exportarDatos(map<string, ProgramaAcademico*> datos) override;
+    void exportarDatos(map<string, ProgramaAcademico *> &datos) override;
 };
 
 #endif
