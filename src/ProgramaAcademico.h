@@ -15,6 +15,9 @@ class ProgramaAcademico {
     int getMatriculadosNuevosPorSemestre(int) const;
     int getMatriculadosNuevosPorAnio(int) const;
     int getMatriculadosPorSemestre(int) const;
+
+    void calcularDiferenciaPorcentualNuevosMatriculados() const;
+
 public:
     int getMatriculadosPorAnio(int) const;
     ProgramaAcademico() = default;

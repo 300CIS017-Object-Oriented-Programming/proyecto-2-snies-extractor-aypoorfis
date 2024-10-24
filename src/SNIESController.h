@@ -32,6 +32,8 @@ public:
     // de lo contrario, solo los calcula.
     void filtrarProgramas(const string &palabraClave, const string &nivelFormacion, bool exportarCSV);
 
+    void calcularDiferenciaPorcentualNuevosMatriculados();
+
     void consolidarMatriculadosPorAno() const;
 
     // Métodos auxiliares
