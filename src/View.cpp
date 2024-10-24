@@ -39,7 +39,8 @@ void View::runMenu() {
             std::cout << "3. Mostrar estudiantes matriculados por año" << std::endl;
             std::cout << "4. Exportar datos " << std::endl;
             std::cout << "5. Exportar diferencia porcentual anual de nuevos estudiantes" << std::endl;
-            std::cout << "6. Salir" << std::endl;
+            std::cout << "6. Mostrar diferencia porcentual nuevos matriculado" << std::endl;
+            std::cout << "7. Salir" << std::endl;
             std::cout << "Seleccione una opción: ";
             std::cin >> opcion;
 
@@ -60,6 +61,9 @@ void View::runMenu() {
                 exportarDiferenciaPorcentualAnualNuevosEstudiantes();
                 break;
             case 6:
+                mostrarCalculoDiferenciaPorcentualNuevosMatriculado();
+                break;
+            case 7:
                 continuar = false;
                 break;
             default:
@@ -338,6 +342,29 @@ void View::exportarDatos() {
     // Llamar al método del controlador para exportar los datos
     controlador.exportarDatos(formato);
     std::cout << "Datos exportados exitosamente en formato " << formato << "." << std::endl;
+}
+
+
+
+void View::mostrarCalculoDiferenciaPorcentualNuevosMatriculado() {
+    std::cout << "Seleccione el programa académico para mostrar la diferencia porcentual de nuevos matriculados:\n";
+
+    for (const auto& pair : controlador.getProgramasAcademicos()) {
+        std::cout << pair.first << ": " << pair.second->getDato("programaacademico") << std::endl;
+    }
+
+    std::cout << "Ingrese el nombre del programa académico: ";
+    std::string nombrePrograma;
+    std::cin >> nombrePrograma;
+
+    // Obtener el programa académico seleccionado
+    ProgramaAcademico* programa = controlador.obtenerProgramaPorNombre(nombrePrograma);
+    if (programa) {
+        // Mostrar la diferencia porcentual de nuevos matriculados
+        programa->mostrarDiferenciaPorcentualNuevosMatriculados();
+    } else {
+        std::cout << "Programa académico no encontrado." << std::endl;
+    }
 }
 
 
