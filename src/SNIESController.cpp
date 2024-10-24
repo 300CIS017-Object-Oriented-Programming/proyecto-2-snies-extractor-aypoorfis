@@ -138,3 +138,24 @@ void ProgramaAcademico::calcularDiferenciaPorcentualNuevosMatriculados() const {
     std::string rutaArchivo = Settings::BASE_PATH + "outputs/diferencia_porcentual_nuevos_matriculados.csv";
     exportarDiferenciaPorcentualNuevosMatriculados(datos, rutaArchivo);
 }
+
+vector<string> obtenerProgramasSinMatriculasNuevas(const map<string, ProgramaAcademico*> &programas) {
+    vector<string> programasSinMatriculas;
+
+    for (const auto &[codigo, programa] : programas) {
+        if (programa->sinMatriculasNuevas()) {
+            programasSinMatriculas.push_back(programa->getDato("programaacademico"));
+        }
+    }
+    return programasSinMatriculas;
+
+}
+
+void mostrarProgramasSinMatriculasNuevas(const map<string, ProgramaAcademico*> &programas) {
+    vector<string> programasSinMatriculas = obtenerProgramasSinMatriculasNuevas(programas);
+
+    cout << "Programas sin matrículas nuevas en tres semestres consecutivos:" << endl;
+    for (const auto &nombrePrograma : programasSinMatriculas) {
+        cout << nombrePrograma << endl;
+    }
+}
