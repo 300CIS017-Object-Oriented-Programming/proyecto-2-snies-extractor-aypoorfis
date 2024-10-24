@@ -18,7 +18,7 @@ public:
     View();
     ~View();
     // Estructura: El View debería tener solo una función pública.
-    void mostrarMenu();
+    void runMenu();
 };
 
 #endif

@@ -24,6 +24,39 @@ View::~View()
     controlador.~SNIESController();
 }
 
+void View::runMenu() {
+    bool archivosParametrizados = mostrarPantallaBienvenido();
+
+    if (archivosParametrizados) {
+        int opcion;
+        bool continuar = true;
+
+        while (continuar) {
+            std::cout << "\n----- Menú Principal -----" << std::endl;
+            std::cout << "1. Mostrar Datos Extra" << std::endl;
+            std::cout << "2. Buscar por Palabra Clave y Formación" << std::endl;
+            std::cout << "3. Salir" << std::endl;
+            std::cout << "Seleccione una opción: ";
+            std::cin >> opcion;
+
+            switch (opcion) {
+            case 1:
+                mostrarDatosExtra();
+                break;
+            case 2:
+                buscarPorPalabraClaveYFormacion();
+                break;
+            case 3:
+                continuar = false;
+                break;
+            default:
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+            }
+        }
+    }
+    salir();
+}
+
 
 bool View::mostrarPantallaBienvenido()
 {
