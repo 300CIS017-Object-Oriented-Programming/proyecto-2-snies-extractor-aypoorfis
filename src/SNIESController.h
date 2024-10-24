@@ -43,6 +43,9 @@ public:
 
     // Métodos auxiliares
     void exportarDatos(const string &formato);
+    void getProgramasAcademicos();
+    ProgramaAcademico* obtenerProgramaPorNombre(const string& string);
+    void buscarProgramas(bool convertir_csv, const string& string, int id_formacion_academica);
 };
 
 #endif // SNIES_CONTROLLER_H

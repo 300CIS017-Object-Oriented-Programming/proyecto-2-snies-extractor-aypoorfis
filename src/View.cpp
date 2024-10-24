@@ -1,9 +1,10 @@
 #include "View.h"
 #include "SNIESController.h"
+#include <iostream>
 
 // Mantenimiento: Implementar la lectura de las rutas de los archivos CSV desde un
 // archivo de configuración
-View::View()
+View::View(): controlador()
 {
     // NEW quitar estas variables de aquí y del constructor del SNIESController
     //  estas constantes las leerá el SNIESController del archivo de Settings.h
@@ -15,7 +16,6 @@ View::View()
     string ruta5 = string("C:/SNIES_EXTRACTOR/inputs/matriculados");
     string ruta6 = string("C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre");
     string ruta7 = string("C:/SNIES_EXTRACTOR/outputs/");
-    controlador = SNIESController(ruta1, ruta2, ruta3, ruta4, ruta5, ruta6, ruta7);
 }
 
 // Mantenimiento: No llamar al destructor de la clase controlador, hacer que el destructor
@@ -40,7 +40,8 @@ void View::runMenu() {
             std::cout << "4. Exportar datos " << std::endl;
             std::cout << "5. Exportar diferencia porcentual anual de nuevos estudiantes" << std::endl;
             std::cout << "6. Mostrar diferencia porcentual nuevos matriculado" << std::endl;
-            std::cout << "7. Salir" << std::endl;
+            std::cout << "7. Mostrar programas sin matriculas nuevas" << std::endl;
+            std::cout << "8. Salir" << std::endl;
             std::cout << "Seleccione una opción: ";
             std::cin >> opcion;
 
@@ -64,6 +65,9 @@ void View::runMenu() {
                 mostrarCalculoDiferenciaPorcentualNuevosMatriculado();
                 break;
             case 7:
+                mostrarProgramasSinMatriculasNuevas();
+                break;
+            case 8:
                 continuar = false;
                 break;
             default:
@@ -154,7 +158,7 @@ bool View::mostrarPantallaBienvenido()
         }
 
         cout << "Procesando datos ..." << endl;
-        controlador.procesarDatosCsv(anio1, ano2);
+        controlador.procesarDatosCsv();
         cout << "Datos procesados con exito!" << endl;
     }
     return parametrizacionBool;
@@ -367,5 +371,21 @@ void View::mostrarCalculoDiferenciaPorcentualNuevosMatriculado() {
     }
 }
 
+
+void View::mostrarProgramasSinMatriculasNuevas() {
+    std::cout << "Mostrando programas sin matrículas nuevas en tres semestres consecutivos...\n";
+
+
+    const auto& programasSinMatriculas = controlador.obtenerProgramasSinMatriculasNuevas();
+
+    if (programasSinMatriculas.empty()) {
+        std::cout << "No se encontraron programas sin matrículas nuevas en tres semestres consecutivos." << std::endl;
+    } else {
+        std::cout << "Programas sin matrículas nuevas:\n";
+        for (const auto& programa : programasSinMatriculas) {
+            std::cout << "- " << programa << std::endl;
+        }
+    }
+}
 
 

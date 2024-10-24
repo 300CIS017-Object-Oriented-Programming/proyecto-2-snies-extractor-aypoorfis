@@ -17,6 +17,7 @@ private:
     void exportarDiferenciaPorcentualAnualNuevosEstudiantes(); //revisar danilo
     void exportarDatos(); // REVISAR danilo
     void mostrarCalculoDiferenciaPorcentualNuevosMatriculado();
+    void mostrarProgramasSinMatriculasNuevas();
     void salir();
 public:
     View();
