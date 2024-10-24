@@ -32,6 +32,7 @@ void View::runMenu() {
         int opcion;
         bool continuar = true;
 
+        
         while (continuar) {
             std::cout << "\n----- Menú Principal -----" << std::endl;
             std::cout << "1. Mostrar Datos Extra" << std::endl;
