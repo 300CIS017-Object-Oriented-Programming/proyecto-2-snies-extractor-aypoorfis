@@ -13,6 +13,9 @@ private:
     bool mostrarPantallaBienvenido();
     void mostrarDatosExtra();
     void buscarPorPalabraClaveYFormacion();
+    void mostrarEstudiantesMatriculadosXAno(); //REVISAR Danilo
+    void exportarDiferenciaPorcentualAnualNuevosEstudiantes(); //revisar danilo
+    void exportarDatos(); // REVISAR danilo
     void salir();
 public:
     View();
