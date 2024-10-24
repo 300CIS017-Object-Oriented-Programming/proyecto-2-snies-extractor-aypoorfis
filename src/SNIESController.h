@@ -16,7 +16,7 @@ using std::vector;
 class SNIESController {
 private:
     map< string, ProgramaAcademico *> &programasAcademicos;
-    GestorCsv gestorCsvObj;
+    GestorCsv *gestorCsvObj;
     GestorTxt gestorTxtObj;
     GestorJson gestorJsonObj;
 
