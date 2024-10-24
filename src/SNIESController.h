@@ -26,13 +26,15 @@ public:
 
     ~SNIESController();
 
-    void procesarDatosCsv();
+    void procesarDatosCsv() const;
 
     // Si el bool está activada, exporta los datos procesados a un archivo CSV,
     // de lo contrario, solo los calcula.
     void filtrarProgramas(const string &palabraClave, const string &nivelFormacion, bool exportarCSV);
 
-    void consolidarMatriculadosPorAno();
+    void calcularDiferenciaPorcentualNuevosMatriculados();
+
+    void consolidarMatriculadosPorAno() const;
 
     // Métodos auxiliares
     void exportarDatos(const string &formato);

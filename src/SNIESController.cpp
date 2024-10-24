@@ -15,7 +15,7 @@ SNIESController::~SNIESController() {
     }
 }
 
-void SNIESController::procesarDatosCsv() {
+void SNIESController::procesarDatosCsv() const {
     // Inicializar programas de análisis desde el archivo CSV
     GestorCsv::inicializarProgramasDeAnalisisCsv(programasAcademicos);
 
@@ -46,7 +46,7 @@ void SNIESController::filtrarProgramas(const string& palabraClave, const string&
         gestorCsvObj.exportarDatos(resultadosMap);
     }
 }
-void SNIESController::consolidarMatriculadosPorAno() {
+void SNIESController::consolidarMatriculadosPorAno() const {
     map<int, int> matriculadosVirtual;
     map<int, int> matriculadosPresencial;
 
@@ -79,7 +79,6 @@ void SNIESController::consolidarMatriculadosPorAno() {
     }
 }
 
-
 void SNIESController::exportarDatos(const string& formato) {
     if (formato == "CSV") {
         gestorCsvObj.exportarDatos(programasAcademicos);
@@ -90,3 +89,52 @@ void SNIESController::exportarDatos(const string& formato) {
     }
 }
 
+#include <fstream>
+
+// Función auxiliar para exportar datos a un archivo CSV
+void exportarDiferenciaPorcentualNuevosMatriculados(const std::vector<std::tuple<int, int, int>>& datos, const std::string& rutaArchivo) {
+    std::ofstream archivo(rutaArchivo);
+    if (!archivo.is_open()) {
+        throw std::ios_base::failure("No se pudo abrir el archivo CSV para exportar: " + rutaArchivo);
+    }
+
+    archivo << "Año Anterior,Año Actual,Diferencia Porcentual\n";
+    for (const auto& [anioAnterior, anioActual, porcentaje] : datos) {
+        archivo << anioAnterior << "," << anioActual << "," << porcentaje << "%\n";
+    }
+
+    archivo.close();
+    std::cout << "Exportación a CSV exitosa: " << rutaArchivo << std::endl;
+}
+
+void ProgramaAcademico::calcularDiferenciaPorcentualNuevosMatriculados() const {
+    const int limiteInferior = Settings::ANIO_INICIAL;
+    const int limiteSuperior = Settings::ANIO_FINAL;
+    const int n = limiteSuperior - limiteInferior + 1;
+
+    int cantMatriculadosAnterior = 0;
+    int cantMatriculadosActual = getMatriculadosNuevosPorAnio(limiteInferior);
+    int porcentaje = 0;
+
+    std::vector<std::tuple<int, int, int>> datos;
+
+    for (int i = 1; i < n; i++) {
+        cantMatriculadosAnterior = cantMatriculadosActual;
+        cantMatriculadosActual = getMatriculadosNuevosPorAnio(limiteInferior + i);
+        if (cantMatriculadosAnterior != 0) {
+            porcentaje = (cantMatriculadosActual * 100) / cantMatriculadosAnterior;
+        } else {
+            porcentaje = 100; // No hay matriculados anteriores
+        }
+
+        std::cout << "La diferencia porcentual de nuevos matriculados entre los años "
+                  << limiteInferior + i - 1 << " y " << limiteInferior + i << " es: "
+                  << porcentaje << "%" << std::endl;
+
+        datos.emplace_back(limiteInferior + i - 1, limiteInferior + i, porcentaje);
+    }
+
+    // Exportar los datos a un archivo CSV
+    std::string rutaArchivo = Settings::BASE_PATH + "outputs/diferencia_porcentual_nuevos_matriculados.csv";
+    exportarDiferenciaPorcentualNuevosMatriculados(datos, rutaArchivo);
+}
