@@ -25,13 +25,12 @@ using std::string;
 
 class Settings {
 public:
-    // En la clase Settings, las variables ADMITIDOS_FILE_PATH, MATRICULADOS_FILE_PATH y ETC se declaran como static const std::string. Esto significa que son constantes de tipo string que pertenecen a la clase en lugar de a instancias individuales de la clase.
-    static  string ADMITIDOS_FILE_PATH;
-    static  string MATRICULADOS_FILE_PATH;
-    static  string INSCRITOS_FILE_PATH;
-    static  string PROGRAMAS_FILTRAR_FILE_PATH;
-    static  string GRADUADOS_FILE_PATH;
-    static  string BASE_PATH;
+    static string ADMITIDOS_FILE_PATH;
+    static string MATRICULADOS_FILE_PATH;
+    static string INSCRITOS_FILE_PATH;
+    static string PROGRAMAS_FILTRAR_FILE_PATH;
+    static string GRADUADOS_FILE_PATH;
+    static string BASE_PATH;
     static string EXTENSION_ARCHIVOS;
     static char DELIMITADOR;
     static int ANIO_INICIAL;
@@ -50,6 +49,6 @@ public:
     static string getInscritosFilePath();
     static string getProgramasFiltrarFilePath();
     static string getGraduadosFilePath();
-
 };
+
 #endif // SETTINGS_H
