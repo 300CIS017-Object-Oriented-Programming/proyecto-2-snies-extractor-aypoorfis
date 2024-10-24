@@ -1,39 +1,47 @@
 #ifndef SNIES_CONTROLLER_H
 #define SNIES_CONTROLLER_H
-#include <iostream>
+
 #include <vector>
 #include <map>
 #include <string>
-#include <algorithm>
-#include <list>
 #include "ProgramaAcademico.h"
-#include "Consolidado.h"
 #include "GestorCsv.h"
+#include "GestorTxt.h"
+#include "GestorJson.h"
 
-using namespace std;
+using std::map;
+using std::string;
+using std::vector;
 
-class SNIESController
-{
-
+class SNIESController {
 private:
-    map<int, ProgramaAcademico *> programasAcademicos;
-    GestorCsv gestorCsvObj;
-    vector<string> etiquetasColumnas;
-    string rutaProgramasCSV;
-    string rutaAdmitidos;
-    string rutaGraduados;
-    string rutaInscritos;
-    string rutaMatriculados;
-    string rutaMatriculadosPrimerSemestre;
-    string rutaOutput;
+    map<string, ProgramaAcademico*>& programasAcademicos;
+    GestorDatos* gestorDatosObj;
+    map< string, ProgramaAcademico *> &programasAcademicos;
 
 public:
+
     SNIESController() = default;
-    SNIESController(string &, string &, string &, string &, string &, string &, string &);
+    SNIESController(GestorDatos *);
     ~SNIESController();
-    void procesarDatosCsv(string &, string &);
-    void calcularDatosExtra(bool);
-    void buscarProgramas(bool, string &, int);
+
+    void setGestorDatos(GestorDatos *);
+    void procesarDatosCsv() const;
+    // Si el bool está activada, exporta los datos procesados a un archivo CSV,
+    // de lo contrario, solo los calcula.
+    void filtrarProgramas(const string &, const string &n, bool) const;
+
+    void calcularDiferenciaPorcentualNuevosMatriculados();
+
+    void consolidarMatriculadosPorAno(bool) const;
+
+    void mostrarProgramasSinMatriculasNuevas(const map<string, ProgramaAcademico*>& programas);
+
+    vector<string> obtenerProgramasSinMatriculasNuevas(const map<string, ProgramaAcademico*>& programas);
+
+
+    // Métodos auxiliares
+    void exportarDatos(const string &formato) const;
 };
 
-#endif
+#endif // SNIES_CONTROLLER_H

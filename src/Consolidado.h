@@ -2,60 +2,33 @@
 #define CONSOLIDADO_H
 
 #include <string>
-#include <vector>
-#include <iostream>
+#include <map>
+#include <bits/stl_vector.h>
 
-
-using std::cin;
-using std::cout;
-using std::endl;
 using std::string;
+using std::map;
 using std::vector;
 
-
-class Consolidado
-{
+class Consolidado {
 private:
-    int idSexo;
-    string sexo;
-    int ano;
-    int semestre;
-    int inscritos;
-    int admitidos;
-    int matriculados;
-    int matriculadosPrimerSemestre;
-    int graduados;
+    // Este mapa contendría los valores de los atributos de la clase:
+    // idsexo, genero, anio, semestre, inscritos, admitidos, matriculados, matriculadosprimersemestre, graduados
+    map<string, string>datosConsolidado;
 
 public:
-    Consolidado();
-    Consolidado(int, string, int, int, int, int, int, int, int);
+    Consolidado() = default;
+    Consolidado(const vector<string> &etiquetas);
+    // Mantenimiento: Gran cantidad de métodos get y set que tal vez no son estrictamente necesarios
+    // Cambio: Se quitaron algunos sets de la clase Consolidado
 
-    int getIdSexo();
-    void setIdSexo(int);
+    // Este metodo se encarga de devolver el valor del atributo idsexo, que es el único que no es un número
+    string getGenero() const;
+    int getDatoNumerico(string const &dato) const;
+    void setDato(string const &, string const &);
 
-    string getSexo();
-    void setSexo(string &);
-
-    int getAno();
-    void setAno(int);
-
-    int getSemestre();
-    void setSemestre(int);
-
-    int getInscritos();
-    void setInscritos(int);
-
-    int getAdmitidos();
-    void setAdmitidos(int);
-
-    int getMatriculados();
-    void setMatriculados(int);
-
-    int getMatriculadosPrimerSemestre();
-    void setMatriculadosPrimerSemestre(int);
-
-    int getGraduados();
-    void setGraduados(int);
+    string toTxt() const;
+    string toJson() const;
+    string toCsv() const;
 };
 
 #endif // CONSOLIDADO_H

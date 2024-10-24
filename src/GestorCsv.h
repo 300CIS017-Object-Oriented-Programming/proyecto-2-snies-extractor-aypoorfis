@@ -1,29 +1,46 @@
+// After
 #ifndef GESTOR_CSV_H
 #define GESTOR_CSV_H
 
 #include <string>
 #include <vector>
 #include <map>
-#include <fstream>
-#include <sstream>
 #include <list>
-#include <algorithm>
+#include <fstream>
+#include <unordered_map>
 #include "ProgramaAcademico.h"
-#include "Consolidado.h"
+#include "GestorDatos.h"
 
-using namespace std;
+using std::string;
+using std::vector;
+using std::map;
+using std::list;
+using std::unordered_map;
 
-class GestorCsv
-{
+class GestorCsv : public GestorDatos {
+private:
+    // Esta función convierte un string a minúsculas y elimina los espacios en blanco y tildes.
+    static string convertirStringFormaEstandar(const string &);
+    // Esta función divide una línea de un archivo CSV en un vector de strings.
+    static vector<string> dividirLineaCSV(string &);
+    // Esta función convierte un vector de strings a minúsculas y elimina los espacios en blanco y tildes.
+    static vector<string> convertirVectorFormaEstandar(vector<string> &);
+    // Esta función adjunta los datos de un programa académico (en forma de vector) a un Programa Académico adentro
+    // de un mapa.
+    static void adjuntarDatosProgramaAcademico(vector<string> &, vector<string> &, ProgramaAcademico &);
+    // Esta función adjunta los datos de un archivo CSV a un map<string, ProgramaAcademico*>,
+    // es decir, adjunta la información de todas las ocurrencias de los programas de análisis.
+    static void adjuntarDatosArchivo(string const &, map<string, ProgramaAcademico*> &);
 public:
     GestorCsv() = default;
-    vector<int> leerProgramasCsv(string &ruta);
-    vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies);
-    vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies);
-    vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies);
-    bool crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas);
-    bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas);
-    bool crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir);
+    ~GestorCsv() = default;
+    // Esta función inicializa los programas de análisis de un archivo CSV, agregandolos como Programas vacíos
+    // en el mapa.
+    static void inicializarProgramasDeAnalisisCsv(map<string, ProgramaAcademico*> &);
+    // Esta función adjunta todos los datos de los programas de análisis de todos los archivos CSV a un mapa.
+    static void adjuntarTodosLosDatos(map<string, ProgramaAcademico*> &);
+    // Esta función exporta los datos de los programas de análisis a un archivo CSV.
+    void exportarDatos(map<string, ProgramaAcademico *> &datos) override;
 };
 
 #endif

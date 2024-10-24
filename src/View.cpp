@@ -1,5 +1,8 @@
 #include "View.h"
+#include "SNIESController.h"
 
+// Mantenimiento: Implementar la lectura de las rutas de los archivos CSV desde un
+// archivo de configuración
 View::View()
 {
     // NEW quitar estas variables de aquí y del constructor del SNIESController
@@ -15,13 +18,67 @@ View::View()
     controlador = SNIESController(ruta1, ruta2, ruta3, ruta4, ruta5, ruta6, ruta7);
 }
 
+// Mantenimiento: No llamar al destructor de la clase controlador, hacer que el destructor
+//  del View sea por defecto y el de controlador se llame automáticamente al salir del programa
 View::~View()
 {
     controlador.~SNIESController();
 }
 
+void View::runMenu() {
+    bool archivosParametrizados = mostrarPantallaBienvenido();
+
+    
+    if (archivosParametrizados) {
+        int opcion;
+        bool continuar = true;
+
+        while (continuar) {
+            std::cout << "\n----- Menú Principal -----" << std::endl;
+            std::cout << "1. Mostrar Datos Extra" << std::endl;
+            std::cout << "2. Buscar por Palabra Clave y Formación" << std::endl;
+            std::cout << "3. Mostrar estudiantes matriculados por año" << std::endl;
+            std::cout << "4. Exportar datos " << std::endl;
+            std::cout << "5. Exportar diferencia porcentual anual de nuevos estudiantes" << std::endl;
+            std::cout << "6. Mostrar diferencia porcentual nuevos matriculado" << std::endl;
+            std::cout << "7. Salir" << std::endl;
+            std::cout << "Seleccione una opción: ";
+            std::cin >> opcion;
+
+            switch (opcion) {
+            case 1:
+                mostrarDatosExtra();
+                break;
+            case 2:
+                buscarPorPalabraClaveYFormacion();
+                break;
+            case 3:
+                mostrarEstudiantesMatriculadosXAno();
+                break;
+            case 4:
+                exportarDatos();
+                break;
+            case 5:
+                exportarDiferenciaPorcentualAnualNuevosEstudiantes();
+                break;
+            case 6:
+                mostrarCalculoDiferenciaPorcentualNuevosMatriculado();
+                break;
+            case 7:
+                continuar = false;
+                break;
+            default:
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+            }
+        }
+    }
+    salir();
+}
+
+
 bool View::mostrarPantallaBienvenido()
 {
+    // Mantenimiento: Nombre confuso de la variable, cambiar a algo más descriptivo
     bool parametrizacionBool = false;
 
     cout << "Bienvenido al SNIES-Extractor!" << endl;
@@ -30,20 +87,19 @@ bool View::mostrarPantallaBienvenido()
     cout << "antes la carpeta SNIES_EXTRACTOR en el disco duro C:, con sus respectivas carpetas inputs y outputs" << endl;
     cout << "y todos los archivo CSV del SNIES." << endl;
     cout << "Si ya hizo esto, escriba 'Y', de lo contrario 'N', y Enter: " << endl;
-    char userAnswer = 'Y'; // FIXME cuando se arregle el debugger
+    char userAnswer = 'Y';
     // cin >> userAnswer;
     // cout << endl;
-    // FIXME verificar que el usuario ingree un valor igual al esperado incluir todo dentro de un while para
-    // para asegurar que el usuario ingrese un valor valido
-    // pasarlo a un método que se pueda usar en otros lugares
     userAnswer = static_cast<char>(tolower(userAnswer));
+    // Código muy extenso, se puede simplificar
     if (userAnswer == 'y')
     {
         parametrizacionBool = true;
 
         string userText;
         cout << "A continuacion se procesaran los datos de los programas academicos seleccionados en /programas.csv..." << endl;
-
+        // Manteniemiento: Cambiar el nombre de las variables a algo más descriptivo
+        // y quitar las variables que no se usan
         string anio1("abc");
         string ano2("abc");
         string anoAux;
@@ -52,6 +108,7 @@ bool View::mostrarPantallaBienvenido()
         // FIXME pasar la lógica del bucle a un método reutlizable
         // Usar en el while una bandera y simplificar el código
         // Bucle para leer un valor valido del año1
+        // Mantenimiento: Alta complejidad y repetición de código, refactorizar.
         while (!(isConvetibleToInt(anio1)))
         {
             if (i == 1)
@@ -89,6 +146,7 @@ bool View::mostrarPantallaBienvenido()
         // Organizo los años
         // FIXME: Crear un método para hacer que el segundo año sea siempre
         // mayor que el primer año
+        // Mantenimiento: Simplificar el código, implementar o usar funciones auxiliares como swap
         if (stoi(ano2) < stoi(anio1))
         {
             anoAux = anio1;
@@ -103,6 +161,7 @@ bool View::mostrarPantallaBienvenido()
     return parametrizacionBool;
 }
 
+// Mantenimiento: Mejorar el nombre del metodo, es posible hacerlo más claro.
 void View::salir()
 {
     cout << "Cerrando programa..." << endl;
@@ -110,13 +169,17 @@ void View::salir()
     cout << "Programa Cerrado con exito!" << endl;
 }
 
+// Mantenimiento: Mejorar el nombre del metodo, es posible hacerlo más claro.
 void View::mostrarDatosExtra()
 {
+    // Mantenimiento: La variable opcionYN se relaciona con otra de otros métodos, pero no tienen el
+    // mismo nombre, la estructura es confusa.
     char opcionYN;
     cout << "A continuacion vamos a mostrar datos relevantes de los programas academicos seleccionados" << "\n"
          << endl;
     cout << "Desea Convertir los datos a un archivo CSV?(Y/N): " << endl;
     cin >> opcionYN;
+    // Recomendacion Linter: No dejar la conversión implicita de int a char.
     opcionYN = tolower(opcionYN);
     cout << "\n";
     // FIXME verificar que el usuario ingrese un valor igual al esperado, return true si es Y, false si es N, y no sale si no retorna un valor válido
@@ -132,8 +195,11 @@ void View::mostrarDatosExtra()
     }
 }
 
+// Mantenimiento: Mejorar el nombre del metodo, es posible hacerlo más claro.
 void View::buscarPorPalabraClaveYFormacion()
 {
+    // Mantenimiento: La variable opcionYN se relaciona con otra de otros métodos, pero no tienen el
+    // mismo nombre, la estructura es confusa.
     char opcionYN = 'y', opcionCSV;
     string palabraClave;
     bool convertirCSV;
@@ -143,9 +209,11 @@ void View::buscarPorPalabraClaveYFormacion()
     {
         cout << "Desea hacer una busqueda por palabra clave del nombre del programa(Y/N): " << endl;
         cin >> opcionYN;
+        // Recomendacion Linter: es preferible usar endl a \n.
         cout << "\n";
         opcionYN = tolower(opcionYN);
 
+        // Alta complejidad ciclomática, refactorizar
         if (opcionYN == 'y')
         {
             cout << "Deseas convertir convertir los datos del programa academico a un CSV?(Y/N): " << endl;
@@ -162,7 +230,8 @@ void View::buscarPorPalabraClaveYFormacion()
             {
                 convertirCSV = false;
             }
-
+            // Coesión y Organización: Baja coesión, este metodo hace cosas que no debería,
+            // separar en métodos más pequeños
             cout << "Escriba la palabra clave para buscar los programas por nombre:" << endl;
             cin >> palabraClave;
             cout << endl;
@@ -187,6 +256,7 @@ bool View::isConvetibleToInt(const string &str)
     try
     {
         std::size_t pos;
+        // Recomendación Linter: La variable num nunca se usa.
         int num = std::stoi(str, &pos);
 
         // Verificamos si se ha convertido toda la cadena
@@ -203,3 +273,100 @@ bool View::isConvetibleToInt(const string &str)
         return false;
     }
 }
+
+void View::mostrarEstudiantesMatriculadosXAno() {
+    std::cout << "Mostrando los estudiantes matriculados por año..." << std::endl;
+
+    // Llamar al método del controlador para consolidar y mostrar los datos
+    controlador.consolidarMatriculadosPorAno();
+}
+
+
+void View::exportarDiferenciaPorcentualAnualNuevosEstudiantes() {
+    std::cout << "Mostrando la diferencia porcentual anual de nuevos estudiantes..." << std::endl;
+
+    // Obtener los datos del controlador
+    std::vector<std::tuple<int, int, int>> datos = controlador.exportarDiferenciaPorcentualNuevosMatriculados();
+
+    // Mostrar los datos en la consola
+    std::cout << "Año Anterior | Año Actual | Diferencia Porcentual\n";
+    for (const auto& [anioAnterior, anioActual, porcentaje] : datos) {
+        std::cout << anioAnterior << " | " << anioActual << " | " << porcentaje << "%\n";
+    }
+
+    // Preguntar si se desea exportar los datos a un archivo CSV
+    char opcion;
+    std::cout << "\n¿Desea exportar los datos a un archivo CSV? (s/n): ";
+    std::cin >> opcion;
+
+    if (opcion == 's' || opcion == 'S') {
+        std::string rutaArchivo;
+        std::cout << "Ingrese la ruta del archivo (incluyendo nombre y extensión .csv): ";
+        std::cin >> rutaArchivo;
+
+        try {
+            // Exportar los datos usando la función de exportación
+            exportarDiferenciaPorcentualNuevosMatriculados(datos, rutaArchivo);
+        } catch (const std::ios_base::failure& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+}
+
+
+void View::exportarDatos() {
+    std::cout << "Seleccione el formato para exportar los datos:" << std::endl;
+    std::cout << "1. CSV" << std::endl;
+    std::cout << "2. TXT" << std::endl;
+    std::cout << "3. JSON" << std::endl;
+    std::cout << "Ingrese su opción (1-3): ";
+
+    int opcion;
+    std::cin >> opcion;
+
+    std::string formato;
+    switch (opcion) {
+    case 1:
+        formato = "CSV";
+        break;
+    case 2:
+        formato = "TXT";
+        break;
+    case 3:
+        formato = "JSON";
+        break;
+    default:
+        std::cout << "Opción inválida. Por favor, seleccione un formato válido." << std::endl;
+        return;
+    }
+
+    // Llamar al método del controlador para exportar los datos
+    controlador.exportarDatos(formato);
+    std::cout << "Datos exportados exitosamente en formato " << formato << "." << std::endl;
+}
+
+
+
+void View::mostrarCalculoDiferenciaPorcentualNuevosMatriculado() {
+    std::cout << "Seleccione el programa académico para mostrar la diferencia porcentual de nuevos matriculados:\n";
+
+    for (const auto& pair : controlador.getProgramasAcademicos()) {
+        std::cout << pair.first << ": " << pair.second->getDato("programaacademico") << std::endl;
+    }
+
+    std::cout << "Ingrese el nombre del programa académico: ";
+    std::string nombrePrograma;
+    std::cin >> nombrePrograma;
+
+    // Obtener el programa académico seleccionado
+    ProgramaAcademico* programa = controlador.obtenerProgramaPorNombre(nombrePrograma);
+    if (programa) {
+        // Mostrar la diferencia porcentual de nuevos matriculados
+        programa->mostrarDiferenciaPorcentualNuevosMatriculados();
+    } else {
+        std::cout << "Programa académico no encontrado." << std::endl;
+    }
+}
+
+
+
