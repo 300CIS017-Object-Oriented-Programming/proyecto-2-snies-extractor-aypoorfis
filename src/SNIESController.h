@@ -15,26 +15,25 @@ using std::vector;
 
 class SNIESController {
 private:
+    map<string, ProgramaAcademico*>& programasAcademicos;
+    GestorDatos* gestorDatosObj;
     map< string, ProgramaAcademico *> &programasAcademicos;
-    GestorCsv *gestorCsvObj;
-    GestorTxt gestorTxtObj;
-    GestorJson gestorJsonObj;
 
 public:
 
     SNIESController() = default;
-
+    SNIESController(GestorDatos *);
     ~SNIESController();
 
+    void setGestorDatos(GestorDatos *);
     void procesarDatosCsv() const;
-
     // Si el bool está activada, exporta los datos procesados a un archivo CSV,
     // de lo contrario, solo los calcula.
-    void filtrarProgramas(const string &palabraClave, const string &nivelFormacion, bool exportarCSV);
+    void filtrarProgramas(const string &, const string &n, bool) const;
 
     void calcularDiferenciaPorcentualNuevosMatriculados();
 
-    void consolidarMatriculadosPorAno() const;
+    void consolidarMatriculadosPorAno(bool) const;
 
     void mostrarProgramasSinMatriculasNuevas(const map<string, ProgramaAcademico*>& programas);
 
@@ -42,7 +41,7 @@ public:
 
 
     // Métodos auxiliares
-    void exportarDatos(const string &formato);
+    void exportarDatos(const string &formato) const;
 };
 
 #endif // SNIES_CONTROLLER_H

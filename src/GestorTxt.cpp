@@ -5,7 +5,7 @@
 
 using std::ofstream;
 
-void GestorTxt::exportarDatos(map<string, ProgramaAcademico*> &datos) {
+void GestorTxt::exportarDatos(map<string, ProgramaAcademico *> &datos) {
     const string nombreArchivoOutput = Settings::OUTPUT_FILE_PATH;
     // Crear un archivo de salida
     ofstream archivoSalida(nombreArchivoOutput);

@@ -20,8 +20,10 @@
 #define SETTINGS_H
 
 #include <string>
+#include <vector>
 
 using std::string;
+using std::vector;
 
 class Settings {
 public:
@@ -34,6 +36,8 @@ public:
     static string OUTPUT_FILE_PATH;
     static  string BASE_PATH;
     static string EXTENSION_ARCHIVOS;
+    static vector<string> ETIQUETAS_COLUMNAS;
+    static vector<string> LLAVES_DATOS;
     static char DELIMITADOR;
     static int ANIO_INICIAL;
     static int ANIO_FINAL;

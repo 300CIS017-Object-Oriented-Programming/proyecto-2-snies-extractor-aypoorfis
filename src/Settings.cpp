@@ -14,6 +14,28 @@ string Settings::EXTENSION_ARCHIVOS = ".csv";
 char Settings::DELIMITADOR = ';';
 int Settings::ANIO_INICIAL = 2010;
 int Settings::ANIO_FINAL = 2020;
+vector<string> Settings::ETIQUETAS_COLUMNAS = {"Código de la institución", "IES padre",
+    "institución principal o seccional", "ID sector IES", "sector IES",
+    "ID carácter", "carácter IES", "código del departamento (IES)", "departamento de domicilio de la IES",
+    "código del municipio IES", "municipio de domicilio de la IES", "Código SNIES del programa", "programa académico",
+    "núcleo básico del conocimiento", "ID nivel académico", "nivel académico", "ID nivel de formación",
+    "nivel de formación", "ID metodología", "metodología", "ID área", "área de conocimiento", "ID núcleo",
+    "núcleo básico del conocimiento (NBC)", "ID CINE campo amplio", "descripción CINE campo amplio",
+    "ID CINE campo específico", "descripción CINE campo específico", "ID CINE código detallado",
+    "descripción CINE código detallado", "código del departamento (programa)", "departamento de oferta del programa",
+    "código del municipio (programa)", "municipio de oferta del programa", "Inscritos", "admitidos",
+    "nuevos matriculados", "graduados", "género", "año", "semestre"};
+
+vector<string> Settings::LLAVES_DATOS = {"codigodelainstitucion", "iespadre", "institucionprincipaloseccional", "idsectories", "sectories",
+    "idcaracter", "caracteries", "codigodeldepartamentoies", "departamentodedomiciliodelaies",
+    "codigodelmunicipioies", "municipiodedomiciliodelaies", "codigosniesdelprograma", "programaacademico",
+    "nucleobasicodelconocimiento", "idnivelacademico", "nivelacademico", "idniveldeformacion",
+    "niveldeformacion", "idmetodologia", "metodologia", "idarea", "areadeconocimiento", "idnucleo",
+    "nucleobasicodelconocimientonbc", "idcinecampoamplio", "descripcioncinecampoamplio",
+    "idcinecampoespecifico", "descripcioncinecampoespecifico", "idcinecodigodetallado",
+    "descripcioncinecodigodetallado", "codigodeldepartamentoprograma", "departamentodeofertadelprograma",
+    "codigodelmunicipioprograma", "municipiodeofertadelprograma", "inscritos", "admitidos",
+    "nuevosmatriculados", "graduados", "genero", "ano", "semestre"};
 
 
 // Implementación de los métodos setters
