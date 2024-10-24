@@ -15,7 +15,7 @@ SNIESController::~SNIESController() {
     }
 }
 
-void SNIESController::procesarDatosCsv() {
+void SNIESController::procesarDatosCsv() const {
     // Inicializar programas de análisis desde el archivo CSV
     GestorCsv::inicializarProgramasDeAnalisisCsv(programasAcademicos);
 
@@ -46,7 +46,7 @@ void SNIESController::filtrarProgramas(const string& palabraClave, const string&
         gestorCsvObj.exportarDatos(resultadosMap);
     }
 }
-void SNIESController::consolidarMatriculadosPorAno() {
+void SNIESController::consolidarMatriculadosPorAno() const {
     map<int, int> matriculadosVirtual;
     map<int, int> matriculadosPresencial;
 
