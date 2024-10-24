@@ -1,7 +1,8 @@
 #include "SNIESController.h"
 #include <iostream>
 #include <fstream>
-
+#include <string>
+#include "Settings.h"
 using std::cout;
 using std::endl;
 using std::ifstream;
@@ -22,50 +23,64 @@ void SNIESController::procesarDatosCsv() {
     GestorCsv::adjuntarTodosLosDatos(programasAcademicos);
 }
 
-void SNIESController::calcularDatosExtra(bool flag) {
+void SNIESController::filtrarProgramas(const string& palabraClave, const string& nivelFormacion, bool exportarCSV) {
+    vector<ProgramaAcademico*> resultados;
+
     for (auto& pair : programasAcademicos) {
         ProgramaAcademico* programa = pair.second;
 
-        int totalMatriculados = 0;
-        int nuevosMatriculados = 0;
-
-        for (const auto& consolidadoPair : programa->consolidados) {
-            Consolidado* consolidado = consolidadoPair.second;
-            totalMatriculados += consolidado->getMatriculados();
-            nuevosMatriculados += consolidado->getMatriculadosPrimerSemestre();
+        if (programa->contienePalabraClave(palabraClave) && programa->tieneNivelDeFormacion(nivelFormacion)) {
+            resultados.push_back(programa);
         }
-
-        // Guardar los datos calculados en el programa académico
-        programa->setDato("totalMatriculados", to_string(totalMatriculados));
-        programa->setDato("nuevosMatriculados", to_string(nuevosMatriculados));
     }
 
-    if (flag) {
-        // Exportar datos adicionales si la flag está activada
-        gestorCsvObj.exportarDatos(programasAcademicos);
+    for (ProgramaAcademico* programa : resultados) {
+        programa->mostrarInformacionPrincipalPrograma();
+    }
+
+    if (exportarCSV) {
+        map<string, ProgramaAcademico*> resultadosMap;
+        for (ProgramaAcademico* programa : resultados) {
+            resultadosMap[programa->getDato("codigosnies")] = programa;
+        }
+        gestorCsvObj.exportarDatos(resultadosMap);
     }
 }
+void SNIESController::consolidarMatriculadosPorAno() {
+    map<int, int> matriculadosVirtual;
+    map<int, int> matriculadosPresencial;
 
-void SNIESController::buscarProgramas(bool flag, const string& criterio, int valor) {
-    // Implementación de búsqueda de programas académicos
-    for (auto& pair : programasAcademicos) {
+    if (programasAcademicos.empty()) {
+        cout << "Error: programasAcademicos is not initialized." << endl;
+        return;
+    }
+
+    for (const auto& pair : this->programasAcademicos) {
         ProgramaAcademico* programa = pair.second;
-        // Lógica para buscar programas basados en el criterio y valor
-        // ...
+        string metodologia = programa->getDato("metodoformacion");
+
+        for (int anio = Settings::ANIO_INICIAL; anio <= Settings::ANIO_FINAL; ++anio) {
+            int matriculados = programa->getMatriculadosPorAnio(anio);
+
+            if (metodologia == "Virtual") {
+                matriculadosVirtual[anio] += matriculados;
+            } else if (metodologia == "Presencial") {
+                matriculadosPresencial[anio] += matriculados;
+            }
+        }
     }
 
-    if (flag) {
-        // Exportar resultados de búsqueda si la flag está activada
-        // ...
+    for (const auto& entry : matriculadosVirtual) {
+        cout << "Año " << entry.first << ": " << entry.second << " matriculados" << endl;
+    }
+
+    for (const auto& entry : matriculadosPresencial) {
+        cout << "Año " << entry.first << ": " << entry.second << " matriculados" << endl;
     }
 }
 
-void SNIESController::procesarConsolidados(ProgramaAcademico* programa, int i, int& sumaNeosSemestre) {
-    // Implementación de procesamiento de consolidados
-    // ...
-}
 
-void SNIESController::exportarDatos(const string& rutaOutput, const vector<vector<string>>& matrizFinal, const string& formato) {
+void SNIESController::exportarDatos(const string& formato) {
     if (formato == "CSV") {
         gestorCsvObj.exportarDatos(programasAcademicos);
     } else if (formato == "TXT") {
@@ -74,3 +89,4 @@ void SNIESController::exportarDatos(const string& rutaOutput, const vector<vecto
         gestorJsonObj.exportarDatos(programasAcademicos);
     }
 }
+

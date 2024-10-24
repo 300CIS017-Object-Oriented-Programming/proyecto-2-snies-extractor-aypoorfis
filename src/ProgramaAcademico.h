@@ -15,8 +15,8 @@ class ProgramaAcademico {
     int getMatriculadosNuevosPorSemestre(int) const;
     int getMatriculadosNuevosPorAnio(int) const;
     int getMatriculadosPorSemestre(int) const;
-    int getMatriculadosPorAnio(int) const;
 public:
+    int getMatriculadosPorAnio(int) const;
     ProgramaAcademico() = default;
     ~ProgramaAcademico();
     void setDato(string const &, string);

@@ -1,5 +1,4 @@
 #include "Settings.h"
-#include <string>
 
 using std::string;
 
@@ -20,24 +19,18 @@ int Settings::ANIO_FINAL = 2020;
 // Implementación de los métodos setters
 void Settings::setBasePath(const string& newPath) {
     BASE_PATH = newPath;
-    // Actualiza las rutas que dependen de BASE_PATH
-    PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "programas.csv";
-    ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
-    MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados";
-    INSCRITOS_FILE_PATH = BASE_PATH + "inscritos";
-    GRADUADOS_FILE_PATH = BASE_PATH + "graduados";
 }
 
-void Settings::setDelimitador(const char& newDelimitador) {
+void Settings::setDelimitador(const char &newDelimitador) {
     DELIMITADOR = newDelimitador;
 }
 
 void Settings::setAnioInicial(const string &newAnioInicial) {
-    ANIO_INICIAL = stoi(newAnioInicial);
+    ANIO_INICIAL = std::stoi(newAnioInicial);
 }
 
 void Settings::setAnioFinal(const string &newAnioFinal) {
-    ANIO_FINAL = stoi(newAnioFinal);
+    ANIO_FINAL = std::stoi(newAnioFinal);
 }
 
 void Settings::setAnioAdmitidos(const string &newAnioRuta) {
@@ -56,7 +49,6 @@ void Settings::setAnioGraduados(const string &newAnioRuta) {
     GRADUADOS_FILE_PATH = BASE_PATH + "graduados" + newAnioRuta + EXTENSION_ARCHIVOS;
 }
 
-// Implementación de los métodos getters
 string Settings::getAdmitidosFilePath() {
     return ADMITIDOS_FILE_PATH;
 }
@@ -76,5 +68,3 @@ string Settings::getProgramasFiltrarFilePath() {
 string Settings::getGraduadosFilePath() {
     return GRADUADOS_FILE_PATH;
 }
-
-

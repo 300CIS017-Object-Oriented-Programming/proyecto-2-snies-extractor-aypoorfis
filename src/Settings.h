@@ -51,6 +51,6 @@ public:
     static string getInscritosFilePath();
     static string getProgramasFiltrarFilePath();
     static string getGraduadosFilePath();
-
 };
+
 #endif // SETTINGS_H
