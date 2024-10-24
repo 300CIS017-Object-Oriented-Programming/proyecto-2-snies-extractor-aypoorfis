@@ -31,6 +31,7 @@ public:
     static  string INSCRITOS_FILE_PATH;
     static  string PROGRAMAS_FILTRAR_FILE_PATH;
     static  string GRADUADOS_FILE_PATH;
+    static string OUTPUT_FILE_PATH;
     static  string BASE_PATH;
     static string EXTENSION_ARCHIVOS;
     static char DELIMITADOR;
@@ -50,6 +51,6 @@ public:
     static string getInscritosFilePath();
     static string getProgramasFiltrarFilePath();
     static string getGraduadosFilePath();
-
 };
+
 #endif // SETTINGS_H

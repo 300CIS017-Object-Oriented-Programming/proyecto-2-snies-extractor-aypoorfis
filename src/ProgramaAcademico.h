@@ -15,6 +15,9 @@ class ProgramaAcademico {
     int getMatriculadosNuevosPorSemestre(int) const;
     int getMatriculadosNuevosPorAnio(int) const;
     int getMatriculadosPorSemestre(int) const;
+
+    void calcularDiferenciaPorcentualNuevosMatriculados() const;
+
 public:
     int getMatriculadosPorAnio(int) const;
     ProgramaAcademico() = default;
@@ -36,6 +39,9 @@ public:
     // Esta función muestra el código SNIES, nombre del programa, código de la institución, nombre de la institución
     // y metodologia de formación.
     void mostrarInformacionPrincipalPrograma();
+    string toTxt() const;
+    string toJson() const;
+    string toCsv() const;
 };
 
 #endif
