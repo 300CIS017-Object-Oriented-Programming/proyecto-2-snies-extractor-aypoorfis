@@ -14,17 +14,13 @@ using std::string;
 using std::map;
 using std::vector;
 
-
 class GestorDatos {
 public:
+    GestorDatos() = default;
     // Destructor
     virtual ~GestorDatos() = default;
     // Metodo para escribir datos procesados en un archivo
-    virtual void exportarDatos(map<string, ProgramaAcademico*>) = 0;
-
-protected:
-    // Metodo de ayuda para manejar errores comunes
-    void manejarErrores(const string& mensaje);
+    virtual void exportarDatos(map<string, ProgramaAcademico*> &) = 0;
 };
 
 #endif // GESTOR_DATOS_H

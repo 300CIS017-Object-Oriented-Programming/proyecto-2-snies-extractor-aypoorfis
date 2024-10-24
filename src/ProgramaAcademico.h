@@ -36,6 +36,9 @@ public:
     // Esta función muestra el código SNIES, nombre del programa, código de la institución, nombre de la institución
     // y metodologia de formación.
     void mostrarInformacionPrincipalPrograma();
+    string toTxt() const;
+    string toJson() const;
+    string toCsv() const;
 };
 
 #endif
